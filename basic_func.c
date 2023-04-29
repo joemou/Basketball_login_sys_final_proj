@@ -8,13 +8,19 @@ typedef struct node{
     char name[25];
     int score;
     struct node *next;
+    struct node *left;
+    struct node *right;
 } node;
+
 //insert node at head
+
 void create(node **head,char *name,int score){
     node *temp = (node *)malloc(sizeof(node));
     strcpy(temp->name, name);
     temp->score = score;
     temp->next = NULL;
+    temp->right = NULL;
+    temp->left = NULL;
     if(head==NULL){
         *head = temp;
     }
@@ -46,9 +52,7 @@ void split(node *first,node **a,node **b){
     *b = slow->next;
 
     *a = first;
-    slow->next = NULL;
-
-    
+    slow->next = NULL;   
 }
 //merge the node
 node *merge(node *a,node *b){
