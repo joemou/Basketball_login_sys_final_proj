@@ -7,13 +7,16 @@
 typedef struct node{
     char name[25];
     int score;
+
+    int height;
     struct node *next;
-    struct node *left;
     struct node *right;
+    struct node *left;
 } node;
 
-//insert node at head
+/*for create the node*/
 
+//insert node at head
 void create(node **head,char *name,int score){
     node *temp = (node *)malloc(sizeof(node));
     strcpy(temp->name, name);
@@ -31,6 +34,7 @@ void create(node **head,char *name,int score){
 }
 
 
+/*for merge sort*/
 
 //find mid and split
 void split(node *first,node **a,node **b){
@@ -52,7 +56,9 @@ void split(node *first,node **a,node **b){
     *b = slow->next;
 
     *a = first;
-    slow->next = NULL;   
+    slow->next = NULL;
+
+    
 }
 //merge the node
 node *merge(node *a,node *b){
@@ -77,7 +83,6 @@ node *merge(node *a,node *b){
 
     return result;
 }
-
 void mergesort (node **head){
     node *first = *head;
     node *a;
@@ -95,7 +100,51 @@ void mergesort (node **head){
     *head = merge(a,b);
 }
 
-void print(node **head){
+/*for AVL tree*/
+
+void AVL_STRING_INSERTION(node **root){
+
+}
+
+void AVL_STRING_DELETION(node **root){
+    if(root==NULL){
+        root = getnode(data);
+    }
+    else if(data<=root->data){
+        root->left = insert(root->left, data);
+    }
+    else{
+        root->right = insert(root->right, data);
+    }
+    return root;
+
+}
+
+void print_player(node *node){
+
+
+} 
+
+void AVL_STRING_SEARCH(node *root,char *name){
+    int flag = strcmp(name, root->name);
+    if (root==NULL){
+        printf("Not found\n");
+    }
+    else if(flag==0){
+        print_player(root);
+    }
+    else if(flag<0){
+        return AVL_STRING_SEARCH(root->left, name);
+    }
+    else{
+        return AVL_STRING_SEARCH(root->right, name);
+    }
+}
+
+
+
+
+void print_linklist(node **head){
 
     node *temp = *head;
     printf("name score\n");
