@@ -195,61 +195,76 @@ struct node *insert(struct node *root, struct node *node) {
   return root;
 }
 
+//find the min value under specify node
+struct node *min_name(struct node *node) {
+  struct node *current = node;
+
+  while (current->left != NULL)
+    current = current->left;
+
+  return current;
+}
+
 //delete the node on avl tree and link_list
 struct node *delete(struct node *root, char *name){
   // Find the node and delete it
   int flag = strcmp(name,root->name);
   if (root == NULL)
     return root;
-
   if (flag<0)
     root->left = delete(root->left, name);
-
   else if (flag>0)
     root->right = delete(root->right, name);
-
+  //when find it(flag==0)
   else {
+    //just has one child and no child
     if ((root->left == NULL) || (root->right == NULL)) {
-      struct Node *temp = root->left ? root->left : root->right;
-
+      struct node *temp = root->left ? root->left : root->right;
+      //no child
       if (temp == NULL) {
         temp = root;
         root = NULL;
-      } else
+      }
+      //one child 
+      else
         *root = *temp;
       free(temp);
-    } else {
-      struct Node *temp = minValueNode(root->right);
+    }
+    //two children 
+    else {
+      //find the right child then its leftest side(inorder) making it banlance
+      struct node *temp = min_name(root->right);
 
-      root->key = temp->key;
+      //copy the temp data and rewrite root
+      strcpy(root->name, temp->name);
+      root->score = temp->score;
 
-      root->right = deleteNode(root->right, temp->key);
+      //delete the temp data cuz its had been copy to root
+      root->right = delete(root->right, temp->name);
     }
   }
 
+  //rebanlance the tree
   if (root == NULL)
     return root;
 
-  // Update the balance factor of each node and
-  // balance the tree
-  root->height = 1 + max(height(root->left),
-               height(root->right));
+  root->height = 1 + max(height(root->left),height(root->right));
 
   int balance = getBalance(root);
   if (balance > 1 && getBalance(root->left) >= 0)
-    return rightRotate(root);
+    return RR(root);
 
   if (balance > 1 && getBalance(root->left) < 0) {
-    root->left = leftRotate(root->left);
-    return rightRotate(root);
+    root->left = LL(root->left);
+    return RR(root);
   }
 
   if (balance < -1 && getBalance(root->right) <= 0)
-    return leftRotate(root);
+    return LL(root);
 
   if (balance < -1 && getBalance(root->right) > 0) {
-    root->right = rightRotate(root->right);
-    return leftRotate(root);
+    root->right = RR(root->right);
+    return LL(root);
   }
 
   return root;
