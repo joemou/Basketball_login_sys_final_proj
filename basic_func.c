@@ -166,7 +166,8 @@ struct node *insert(struct node *root, struct node *node) {
     root->right = insert(root->right, node);
   }
   else{
-    return root; // node with same name already exists
+    printf("name exist\n");
+    return; // node with same name already exists
   }
   // Update height of this node
   root->height = 1 + max(height(root->left), height(root->right));
@@ -184,16 +185,13 @@ struct node *insert(struct node *root, struct node *node) {
     root->left = LL(root->left);
     return RR(root);
   }
-
   if (balance < -1 && strcmp(node->name, root->right->name) < 0) {
     root->right = RR(root->right);
     return LL(root);
   }
-
+  //if balance no rotation
   return root;
 }
-
-
 
 void print_player(node *node){
   printf("%s %d",node->name,node->score);
@@ -232,8 +230,8 @@ void printInorder(struct node* node)
 
 
 /*for printing linklist */
-void print_linklist(node **head){
-  node *temp = *head;
+void print_linklist(node *head){
+  node *temp = head;
   printf("name score\n");
   while(temp!=NULL){
     printf("%s %d\n",temp->name,temp->score);
@@ -262,5 +260,27 @@ int main(){
   }
   mergesort(&head);
 
-  printInorder(root);
+  int action = -1;
+  char search_name[25];
+  printf("\n0.exit\n");
+  printf("1.print player orederd by socre\n");
+  printf("2.print player orederd by name alphabet\n");
+  printf("3.delete the player by input name\n");
+  printf("4.search player by input name\n\n");
+  printf("action: ");
+  while(scanf("%d",&action)!=0){
+    switch(action){
+        case 1:
+            print_linklist(head);
+            break;
+        case 2:
+            printInorder(root);
+            break;
+        case 4:
+            printf("plz input the name\n");
+            scanf("%s", search_name);
+            AVL_STRING_SEARCH(root, search_name);
+            break;
+        }
+  }
 }
