@@ -167,24 +167,26 @@ struct node *insert(struct node *root, struct node *node) {
   }
   else{
     printf("name exist\n");
-    return; // node with same name already exists
+    return node; // node with same name already exists
   }
   // Update height of this node
   root->height = 1 + max(height(root->left), height(root->right));
 
   // Check the balance factor and rotate the tree if necessary
   int balance = getBalance(root);
-
+  
+  //right rotation
   if (balance > 1 && strcmp(node->name, root->left->name) < 0)
     return RR(root);
-
+  //left rotation
   if (balance < -1 && strcmp(node->name, root->right->name) > 0)
     return LL(root);
-
+  //left-right rotation
   if (balance > 1 && strcmp(node->name, root->left->name) > 0) {
     root->left = LL(root->left);
     return RR(root);
   }
+  //right-left rotaion
   if (balance < -1 && strcmp(node->name, root->right->name) < 0) {
     root->right = RR(root->right);
     return LL(root);
@@ -255,7 +257,6 @@ int main(){
     printf("Enter name & score:");
     scanf(" %s %d", name, &score);
     create(&head, name, score);//create link list
-
     root = insert(root,head);//create avl tree
   }
   mergesort(&head);
