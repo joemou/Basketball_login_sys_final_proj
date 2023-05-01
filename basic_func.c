@@ -206,15 +206,15 @@ struct node *min_name(struct node *node) {
 }
 
 //delete the node on avl tree and link_list
-struct node *delete(struct node *root, char *name){
+struct node *delete(struct node **head,struct node *root, char *name){
   // Find the node and delete it
   int flag = strcmp(name,root->name);
   if (root == NULL)
     return root;
   if (flag<0)
-    root->left = delete(root->left, name);
+    root->left = delete(head,root->left, name);
   else if (flag>0)
-    root->right = delete(root->right, name);
+    root->right = delete(head,root->right, name);
   //when find it(flag==0)
   else {
     //just has one child and no child
@@ -239,8 +239,15 @@ struct node *delete(struct node *root, char *name){
       strcpy(root->name, temp->name);
       root->score = temp->score;
 
+      //deal with linkedlist part
+      node *temp2 = *head;
+      while(temp2->next!=temp){
+        temp2 = temp2->next;
+      }
+      temp2->next = temp->next;
+
       //delete the temp data cuz its had been copy to root
-      root->right = delete(root->right, temp->name);
+      root->right = delete(head,root->right, temp->name);
     }
   }
 
@@ -300,7 +307,7 @@ void printInorder(struct node* node)
     return;
   }
   printInorder(node->left);
-  printf("%s\n", node->name);
+  printf("%s %d\n", node->name,node->score);
   printInorder(node->right);
 }
 /*end for inorder traversal*/
@@ -341,16 +348,17 @@ int main(){
   printf("\n0.exit\n");
   printf("1.print player orederd by socre\n");
   printf("2.print player orederd by name alphabet\n");
-  printf("3.insert the player\n\n");
+  printf("3.insert the player\n");
   printf("4.delete the player by input name\n");
   printf("5.search player by input name\n\n");
   printf("action: ");
+
   while(scanf("%d",&action)!=0){
     switch(action){
       case 1:
         print_linklist(head);
         break;
-      case 2:
+      case 2: 
         printInorder(root);
         break;
       case 3:
@@ -358,11 +366,13 @@ int main(){
         scanf(" %s %d", name, &score);
         create(&head, name, score);//create link list
         root = insert(root,head);//create avl tree
+        mergesort(&head);//sort
         printf("inserted successfully\n");
         break;
       case 4:
+        printf("plz input the name\n");
         scanf("%s", search_name);
-        delete (root, search_name);
+        delete (&head,root, search_name);
         printf("deleted successfully\n");
         break;
       case 5:
@@ -371,6 +381,7 @@ int main(){
         AVL_STRING_SEARCH(root, search_name);
         break;
     }
+    printf("\naction: ");
   }
 }
 
