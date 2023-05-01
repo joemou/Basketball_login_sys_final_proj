@@ -174,7 +174,7 @@ struct node *insert(struct node *root, struct node *node) {
 
   // Check the balance factor and rotate the tree if necessary
   int balance = getBalance(root);
-  
+
   //right rotation
   if (balance > 1 && strcmp(node->name, root->left->name) < 0)
     return RR(root);
@@ -192,6 +192,66 @@ struct node *insert(struct node *root, struct node *node) {
     return LL(root);
   }
   //if balance no rotation
+  return root;
+}
+
+//delete the node on avl tree and link_list
+struct node *delete(struct node *root, char *name){
+  // Find the node and delete it
+  int flag = strcmp(name,root->name);
+  if (root == NULL)
+    return root;
+
+  if (flag<0)
+    root->left = delete(root->left, name);
+
+  else if (flag>0)
+    root->right = delete(root->right, name);
+
+  else {
+    if ((root->left == NULL) || (root->right == NULL)) {
+      struct Node *temp = root->left ? root->left : root->right;
+
+      if (temp == NULL) {
+        temp = root;
+        root = NULL;
+      } else
+        *root = *temp;
+      free(temp);
+    } else {
+      struct Node *temp = minValueNode(root->right);
+
+      root->key = temp->key;
+
+      root->right = deleteNode(root->right, temp->key);
+    }
+  }
+
+  if (root == NULL)
+    return root;
+
+  // Update the balance factor of each node and
+  // balance the tree
+  root->height = 1 + max(height(root->left),
+               height(root->right));
+
+  int balance = getBalance(root);
+  if (balance > 1 && getBalance(root->left) >= 0)
+    return rightRotate(root);
+
+  if (balance > 1 && getBalance(root->left) < 0) {
+    root->left = leftRotate(root->left);
+    return rightRotate(root);
+  }
+
+  if (balance < -1 && getBalance(root->right) <= 0)
+    return leftRotate(root);
+
+  if (balance < -1 && getBalance(root->right) > 0) {
+    root->right = rightRotate(root->right);
+    return leftRotate(root);
+  }
+
   return root;
 }
 
@@ -266,22 +326,53 @@ int main(){
   printf("\n0.exit\n");
   printf("1.print player orederd by socre\n");
   printf("2.print player orederd by name alphabet\n");
-  printf("3.delete the player by input name\n");
-  printf("4.search player by input name\n\n");
+  printf("3.insert the player\n\n");
+  printf("4.delete the player by input name\n");
+  printf("5.search player by input name\n\n");
   printf("action: ");
   while(scanf("%d",&action)!=0){
     switch(action){
-        case 1:
-            print_linklist(head);
-            break;
-        case 2:
-            printInorder(root);
-            break;
-        case 4:
-            printf("plz input the name\n");
-            scanf("%s", search_name);
-            AVL_STRING_SEARCH(root, search_name);
-            break;
-        }
+      case 1:
+        print_linklist(head);
+        break;
+      case 2:
+        printInorder(root);
+        break;
+      case 3:
+        printf("Enter name & score:");
+        scanf(" %s %d", name, &score);
+        create(&head, name, score);//create link list
+        root = insert(root,head);//create avl tree
+        printf("inserted successfully\n");
+        break;
+      case 4:
+        scanf("%s", search_name);
+        delete (root, search_name);
+        printf("deleted successfully\n");
+        break;
+      case 5:
+        printf("plz input the name\n");
+        scanf("%s", search_name);
+        AVL_STRING_SEARCH(root, search_name);
+        break;
+    }
   }
 }
+
+/*
+
+test case:
+
+10
+joe 100
+bob 45
+apple 56
+nui 34
+kyle 90
+aufwiderzen 78
+zebra 28
+monica 10000
+jordan 3232223
+hao 100009
+
+*/
