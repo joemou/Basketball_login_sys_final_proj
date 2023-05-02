@@ -11,8 +11,6 @@ typedef struct node{
   
   struct node *right;//for avl tree pointer
   struct node *left;
-
-  struct node *level_next;//for avl level order traversl pointer
 } node;
 
 
@@ -36,6 +34,23 @@ void create(node **head,char *name,int score){
   }
 }
 /*end for create the node*/
+
+
+void *delete_on_linklist(node **head, char *name){
+  node *temp1 = *head;
+
+  if(strcmp(temp1->name,name)==0){//forget
+    *head = (*head)->next;
+  }
+
+  while(strcmp(temp1->next->name,name)!=0){
+    temp1 = temp1->next;
+  }
+  node *temp2 = temp1->next;//temp2=n
+  temp1->next = temp2->next;//temp1->mext=n+1
+
+  free(temp2);
+}
 
 
 /*for merge sort*/
@@ -63,6 +78,7 @@ void split(node *first,node **a,node **b){
 
     
 }
+
 //merge the node
 node *merge(node *a,node *b){
 
@@ -152,8 +168,8 @@ int getBalance(struct node *root) {
   return height(root->left) - height(root->right);
 }
 
+// Find the correct position to insert the node and insert it
 struct node *insert(struct node *root, struct node *node) {
-  // Find the correct position to insert the node and insert it
   if (root == NULL)
     return node;
 
@@ -232,22 +248,28 @@ struct node *delete(struct node **head,struct node *root, char *name){
     }
     //two children 
     else {
-      //find the right child then its leftest side(inorder) making it banlance
+      //find the right child then its leftest side(i norder) making it banlance
       struct node *temp = min_name(root->right);
 
       //copy the temp data and rewrite root
       strcpy(root->name, temp->name);
       root->score = temp->score;
-
+/*
       //deal with linkedlist part
       node *temp2 = *head;
-      while(temp2->next!=temp){
+      if(temp==temp2){
         temp2 = temp2->next;
       }
-      temp2->next = temp->next;
+      else{
+        while(temp2->next!=temp){
+          temp2 = temp2->next;
+        }
+        temp2->next = temp->next;
+      }*/
 
       //delete the temp data cuz its had been copy to root
       root->right = delete(head,root->right, temp->name);
+
     }
   }
 
@@ -372,6 +394,7 @@ int main(){
       case 4:
         printf("plz input the name\n");
         scanf("%s", search_name);
+        delete_on_linklist(&head, name);
         delete (&head,root, search_name);
         printf("deleted successfully\n");
         break;
