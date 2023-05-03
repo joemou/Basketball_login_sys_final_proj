@@ -36,21 +36,6 @@ void create(node **head,char *name,int score){
 /*end for create the node*/
 
 
-void *delete_on_linklist(node **head, char *name){
-  node *temp1 = *head;
-
-  if(strcmp(temp1->name,name)==0){//forget
-    *head = (*head)->next;
-  }
-
-  while(strcmp(temp1->next->name,name)!=0){
-    temp1 = temp1->next;
-  }
-  node *temp2 = temp1->next;//temp2=n
-  temp1->next = temp2->next;//temp1->mext=n+1
-
-  free(temp2);
-}
 
 
 /*for merge sort*/
@@ -123,6 +108,21 @@ void mergesort (node **head){
 
 /*for AVL tree https://www.youtube.com/watch?v=jDM6_TnYIqE*/
 //detect height
+
+/*for inorder traversal*/
+//print order by alphabet
+void printInorder(struct node* node)
+{
+  if (node == NULL){
+    return;
+  }
+  printInorder(node->left);
+  printf("%s %d\n", node->name,node->score);
+  printInorder(node->right);
+}
+/*end for inorder traversal*/
+
+
 int height(struct node *node) {
   if (node == NULL)
     return 0;
@@ -149,8 +149,8 @@ struct node *RR(struct node *y) {
 
 // Left rotate
 struct node *LL(struct node *x) {
-  struct node *y = x->right;
-  struct node *T2 = y->left;
+  node *y = x->right;
+  node *T2 = y->left;
 
   y->left = x;
   x->right = T2;
@@ -222,55 +222,83 @@ struct node *min_name(struct node *node) {
 }
 
 //delete the node on avl tree and link_list
-struct node *delete(struct node **head,struct node *root, char *name){
+struct node *delete(struct node **head,struct node *point,struct node *root, char *name){
   // Find the node and delete it
-  int flag = strcmp(name,root->name);
   if (root == NULL)
     return root;
-  if (flag<0)
-    root->left = delete(head,root->left, name);
-  else if (flag>0)
-    root->right = delete(head,root->right, name);
+  if (strcmp(name,root->name)<0)
+    root->left = delete(head,point,root->left, name);
+  else if (strcmp(name,root->name)>0)
+    root->right = delete(head,point,root->right, name);
   //when find it(flag==0)
   else {
     //just has one child and no child
     if ((root->left == NULL) || (root->right == NULL)) {
       struct node *temp = root->left ? root->left : root->right;
+
+
+      //deal with linkedlist part
       //no child
       if (temp == NULL) {
         temp = root;
+
+        node *temp2 = point;
+        node *prev = NULL;
+        if(root==temp2){
+          (*head) = (*head)->next;
+        }
+        else{
+          while(temp2!=root){
+            prev = temp2;
+            temp2 = temp2->next;
+          }
+          prev->next = temp2->next;
+        }
+
         root = NULL;
       }
       //one child 
-      else
-        *root = *temp;
+      else{
+
+        //cuz next cannot *root = *temp;
+        strcpy(root->name, temp->name);
+        root->right = temp->right;
+        root->left = temp->left;
+        root->height = temp->height;
+
+        //deal with linkedlist part
+        node *temp2 = point;
+        node *prev = NULL;
+        if(temp==point){
+          (*head) = (*head)->next;
+        }
+        else{
+          while(temp2!=temp){
+            prev = temp2;
+            temp2 = temp2->next;
+          }
+          prev->next = temp2->next;
+        }
+
+        printf("b\n\n");
+      }
       free(temp);
     }
     //two children 
     else {
+
       //find the right child then its leftest side(i norder) making it banlance
       struct node *temp = min_name(root->right);
 
       //copy the temp data and rewrite root
       strcpy(root->name, temp->name);
       root->score = temp->score;
-/*
-      //deal with linkedlist part
-      node *temp2 = *head;
-      if(temp==temp2){
-        temp2 = temp2->next;
-      }
-      else{
-        while(temp2->next!=temp){
-          temp2 = temp2->next;
-        }
-        temp2->next = temp->next;
-      }*/
 
-      //delete the temp data cuz its had been copy to root
-      root->right = delete(head,root->right, temp->name);
-
+      //delete the copied node
+      root->right = delete(head, point, root->right, temp->name);
+      printf("c\n");
     }
+
   }
 
   //rebanlance the tree
@@ -280,18 +308,23 @@ struct node *delete(struct node **head,struct node *root, char *name){
   root->height = 1 + max(height(root->left),height(root->right));
 
   int balance = getBalance(root);
-  if (balance > 1 && getBalance(root->left) >= 0)
-    return RR(root);
 
+  if (balance > 1 && getBalance(root->left) >= 0){
+    printf("aa\n");
+    return RR(root);
+  }
   if (balance > 1 && getBalance(root->left) < 0) {
+    printf("bb\n");
     root->left = LL(root->left);
     return RR(root);
   }
 
-  if (balance < -1 && getBalance(root->right) <= 0)
+  if (balance < -1 && getBalance(root->right) <= 0){
+    printf("%d\n",balance);
     return LL(root);
-
+  }
   if (balance < -1 && getBalance(root->right) > 0) {
+    printf("dd\n");
     root->right = RR(root->right);
     return LL(root);
   }
@@ -320,19 +353,6 @@ void AVL_STRING_SEARCH(node *root,char *name){
 }
 /*end for avl tree*/
 
-
-/*for inorder traversal*/
-//print order by alphabet
-void printInorder(struct node* node)
-{
-  if (node == NULL){
-    return;
-  }
-  printInorder(node->left);
-  printf("%s %d\n", node->name,node->score);
-  printInorder(node->right);
-}
-/*end for inorder traversal*/
 
 
 /*for printing linklist */
@@ -394,8 +414,7 @@ int main(){
       case 4:
         printf("plz input the name\n");
         scanf("%s", search_name);
-        delete_on_linklist(&head, name);
-        delete (&head,root, search_name);
+        delete (&head,head,root, search_name);
         printf("deleted successfully\n");
         break;
       case 5:
@@ -424,4 +443,12 @@ monica 10000
 jordan 3232223
 hao 100009
 
+
+
+5
+a 1
+b 2
+c 3
+d 4
+e 5
 */
