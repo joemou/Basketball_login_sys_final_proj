@@ -307,9 +307,10 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 
   root->height = 1 + max(height(root->left),height(root->right));
 
+
   int balance = getBalance(root);
 
-  if (balance > 1 && getBalance(root->left) >= 0){
+  if (balance > 1 && getBalance(root->left) > 0){
     printf("aa\n");
     return RR(root);
   }
@@ -319,7 +320,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
     return RR(root);
   }
 
-  if (balance < -1 && getBalance(root->right) <= 0){
+  if (balance < -1 && getBalance(root->right) < 0){
     printf("%d\n",balance);
     return LL(root);
   }
