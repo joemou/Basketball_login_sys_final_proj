@@ -13,6 +13,22 @@ typedef struct node{
   struct node *left;
 } node;
 
+void create(node **head, char *name, int score);
+void split(node *first, node **a, node **b);
+struct node *merge(node *a, node *b);
+void mergesort(node **head);
+void printInorder(struct node *node);
+int height(struct node *node);
+int max(int a, int b);
+struct node *RR(struct node *y);
+struct node *LL(struct node *x);
+int getBalance(struct node *root);
+struct node *insert(struct node *root, struct node *node);
+struct node *min_name(struct node *node);
+struct node *delete(struct node **head, struct node *point, struct node *root, char *name);
+void print_player(node *node);
+void AVL_STRING_SEARCH(node *root, char *name);
+void print_linklist(node *head);
 
 /*for create the node*/
 //insert node at head
@@ -65,7 +81,7 @@ void split(node *first,node **a,node **b){
 }
 
 //merge the node
-node *merge(node *a,node *b){
+struct node *merge(node *a,node *b){
 
   node *result;
 
