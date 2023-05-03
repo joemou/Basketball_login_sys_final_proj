@@ -13,11 +13,15 @@ typedef struct node{
   struct node *left;
 } node;
 
+//for crate node
 void create(node **head, char *name, int score);
+
+//for mergesort
 void split(node *first, node **a, node **b);
 struct node *merge(node *a, node *b);
 void mergesort(node **head);
-void printInorder(struct node *node);
+
+//for avl tree and search
 int height(struct node *node);
 int max(int a, int b);
 struct node *RR(struct node *y);
@@ -28,7 +32,10 @@ struct node *min_name(struct node *node);
 struct node *delete(struct node **head, struct node *point, struct node *root, char *name);
 void print_player(node *node);
 void AVL_STRING_SEARCH(node *root, char *name);
+
+//for print
 void print_linklist(node *head);
+void printInorder(struct node *node);
 
 /*for create the node*/
 //insert node at head
