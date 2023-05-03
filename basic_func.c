@@ -406,7 +406,7 @@ int main(){
   char search_name[25];
   printf("\n0.exit\n");
   printf("1.print player orederd by socre\n");
-  printf("2.print player orederd by name alphabet\n");
+  printf("2.print player orederd by name alphabet(INORDER)\n");
   printf("3.insert the player\n");
   printf("4.delete the player by input name\n");
   printf("5.search player by input name\n\n");
