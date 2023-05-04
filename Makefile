@@ -1,5 +1,5 @@
 
-PROG = fixed
+PROG = player_data
 
 CC = gcc
 CFLAGS = `pkg-config --cflags gtk+-3.0`
