@@ -32,10 +32,10 @@ void create(node **head, char *name, int score){
 
 void *delete_on_linklist(node **head, char *name){
     node *temp1 = *head;
-    if(strcmp(temp1->name,name) == 0){ //forget
+    if(strcmp(temp1->name, name) == 0){ //forget
       *head = (*head)->next;
     }
-    while(strcmp(temp1->next->name,name) != 0){
+    while(strcmp(temp1->next->name, name) != 0){
       temp1 = temp1->next;
     }
     node *temp2 = temp1->next; //temp2 = n
@@ -44,17 +44,17 @@ void *delete_on_linklist(node **head, char *name){
     free(temp2);
 }
 
-int height(struct node *node) {
+int height(struct node *node){
     if (node == NULL)
         return 0;
     return node->height;
 }
 
-int max(int a, int b) {
+int max(int a, int b){
     return (a > b) ? a : b;
 }
 
-struct node *RR(struct node *y) {
+struct node *RR(struct node *y){
     node *x = y->left;
     node *T2 = x->right;
 
@@ -67,7 +67,7 @@ struct node *RR(struct node *y) {
     return x;
 }
 
-struct node *LL(struct node *x) {
+struct node *LL(struct node *x){
     struct node *y = x->right;
     struct node *T2 = y->left;
 
@@ -80,22 +80,22 @@ struct node *LL(struct node *x) {
     return y;
 }
 
-int getBalance(struct node *root) {
+int getBalance(struct node *root){
     if (root == NULL)
         return 0;
     return height(root->left) - height(root->right);
 }
 
-struct node *insert(struct node *root, struct node *node) {
-    if (root == NULL)
+struct node *insert(struct node *root, struct node *node){
+    if(root == NULL)
         return node;
 
     int flag = strcmp(node->name,root->name);
 
-    if (flag < 0){
+    if(flag < 0){
         root->left = insert(root->left, node);
     }
-    else if (flag > 0){
+    else if(flag > 0){
         root->right = insert(root->right, node);
     }
     else{
@@ -109,18 +109,18 @@ struct node *insert(struct node *root, struct node *node) {
     int balance = getBalance(root);
 
     //right rotation
-    if (balance > 1 && strcmp(node->name, root->left->name) < 0)
+    if(balance > 1 && strcmp(node->name, root->left->name) < 0)
         return RR(root);
     //left rotation
-    if (balance < -1 && strcmp(node->name, root->right->name) > 0)
+    if(balance < -1 && strcmp(node->name, root->right->name) > 0)
         return LL(root);
     //left-right rotation
-    if (balance > 1 && strcmp(node->name, root->left->name) > 0) {
+    if(balance > 1 && strcmp(node->name, root->left->name) > 0){
         root->left = LL(root->left);
         return RR(root);
     }
     //right-left rotaion
-    if (balance < -1 && strcmp(node->name, root->right->name) < 0) {
+    if(balance < -1 && strcmp(node->name, root->right->name) < 0){
         root->right = RR(root->right);
         return LL(root);
     }
@@ -128,44 +128,41 @@ struct node *insert(struct node *root, struct node *node) {
     return root;
 }
 
-//find the min value under specify node
-struct node *min_name(struct node *node) {
+struct node *min_name(struct node *node){
     struct node *current = node;
 
-    while (current->left != NULL)
+    while(current->left != NULL){
         current = current->left;
-
+    }
     return current;
 }
 
-//delete the node on avl tree and link_list
-struct node *delete(struct node **head,struct node *root, char *name){
-    // Find the node and delete it
-    int flag = strcmp(name,root->name);
-    if (root == NULL)
+struct node *delete(struct node **head, struct node *root, char *name){
+    // when node found, (flag == 0)
+    int flag = strcmp(name, root->name);
+    if(root == NULL)
         return root;
-    if (flag<0)
+    if(flag < 0)
         root->left = delete(head,root->left, name);
-    else if (flag>0)
+    else if(flag > 0)
         root->right = delete(head,root->right, name);
-    //when find it(flag==0)
-    else {
+    else{
         //just has one child and no child
-        if ((root->left == NULL) || (root->right == NULL)) {
-        struct node *temp = root->left ? root->left : root->right;
-        //no child
-        if (temp == NULL) {
-            temp = root;
-            root = NULL;
-        }
-        //one child 
-        else
-            *root = *temp;
-        free(temp);
+        if((root->left == NULL) || (root->right == NULL)) {
+            struct node *temp = root->left ? root->left : root->right;
+            //no child
+            if(temp == NULL) {
+                temp = root;
+                root = NULL;
+            }
+            //one child 
+            else
+                *root = *temp;
+            free(temp);
         }
         //two children 
-        else {
-        //find the right child then its leftest side(i norder) making it banlance
+        else{
+        //find the right child then its leftest side(i norder) making it balance
         struct node *temp = min_name(root->right);
 
         //copy the temp data and rewrite root
@@ -190,25 +187,25 @@ struct node *delete(struct node **head,struct node *root, char *name){
         }
     }
 
-    //rebanlance tree
-    if (root == NULL)
+    // rebalance tree
+    if(root == NULL)
         return root;
 
-    root->height = 1 + max(height(root->left),height(root->right));
+    root->height = 1 + max(height(root->left), height(root->right));
 
     int balance = getBalance(root);
-    if (balance > 1 && getBalance(root->left) >= 0)
+    if(balance > 1 && getBalance(root->left) >= 0)
         return RR(root);
 
-    if (balance > 1 && getBalance(root->left) < 0) {
+    if(balance > 1 && getBalance(root->left) < 0){
         root->left = LL(root->left);
         return RR(root);
     }
 
-    if (balance < -1 && getBalance(root->right) <= 0)
+    if(balance < -1 && getBalance(root->right) <= 0)
         return LL(root);
 
-    if (balance < -1 && getBalance(root->right) > 0) {
+    if(balance < -1 && getBalance(root->right) > 0){
         root->right = RR(root->right);
         return LL(root);
     }
@@ -217,18 +214,18 @@ struct node *delete(struct node **head,struct node *root, char *name){
 }
 
 void print_player(node *node){
-    printf("%s %d",node->name,node->score);
+    printf("%s %d", node->name, node->score);
 } 
 
-void AVL_STRING_SEARCH(node *root,char *name){
+void AVL_STRING_SEARCH(node *root, char *name){
     int flag = strcmp(name, root->name);
-    if (root==NULL){
+    if(root == NULL){
         printf("Not found\n");
     }
-    else if(flag==0){
+    else if(flag == 0){
         print_player(root);
     }
-    else if(flag<0){
+    else if(flag < 0){
         return AVL_STRING_SEARCH(root->left, name);
     }
     else{
@@ -238,22 +235,20 @@ void AVL_STRING_SEARCH(node *root,char *name){
 
 /*for inorder traversal*/
 //print order by alphabet
-void printInorder(struct node* node)
-{
-    if (node == NULL){
+void printInorder(struct node* node){
+    if(node == NULL){
         return;
     }
     printInorder(node->left);
-    printf("%s %d\n", node->name,node->score);
+    printf("%s %d\n", node->name, node->score);
     printInorder(node->right);
 }
 
-/*for printing linklist */
 void print_linklist(node *head){
     node *temp = head;
     printf("name score\n");
-    while(temp!=NULL){
-        printf("%s %d\n",temp->name,temp->score);
+    while(temp != NULL){
+        printf("%s %d\n",temp->name, temp->score);
         temp = temp->next;
   }
 }
