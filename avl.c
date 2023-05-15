@@ -1,16 +1,6 @@
 #include "basic_lib.h"
+#include "node.h"
 #include "avl.h"
-
-typedef struct node{
-    char name[25];
-    int score;
-    int height;
-
-    struct node *next;//for link list pointer
-
-    struct node *right;//for avl tree pointer
-    struct node *left;
-} node;
 
 void create(node **head, char *name, int score){
     node *temp = (node*) malloc(sizeof(node));

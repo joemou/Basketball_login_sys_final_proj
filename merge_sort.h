@@ -7,4 +7,3 @@ node *merge(node *a, node *b);
 
 /*Merge sort*/
 void mergesort (node **head);
-

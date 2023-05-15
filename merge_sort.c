@@ -1,16 +1,6 @@
 #include "basic_lib.h"
+#include "node.h"
 #include "merge_sort.h"
-
-typedef struct node{
-    char name[25];
-    int score;
-    int height;
-
-    struct node *next;//for link list pointer
-
-    struct node *right;//for avl tree pointer
-    struct node *left;
-} node;
 
 void split(node *first, node **a, node **b){
 
@@ -20,9 +10,9 @@ void split(node *first, node **a, node **b){
     fast = first->next;
     slow = first;
 
-    while(fast!=NULL){
+    while(fast != NULL){
       fast = fast->next;
-      if(fast!=NULL){
+      if(fast != NULL){
         fast = fast->next;
         slow = slow->next;
       }
@@ -56,12 +46,12 @@ node *merge(node *a, node *b){
     return result;
 }
 
-void mergesort (node **head){
+void mergesort(node **head){
     node *first = *head;
     node *a;
     node *b;
 
-    if((first==NULL) || (first->next==NULL)){
+    if((first == NULL) || (first->next == NULL)){
         return;
     }
 
