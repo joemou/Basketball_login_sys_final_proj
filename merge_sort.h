@@ -6,4 +6,4 @@ void split(node *first, node **a, node **b);
 node *merge(node *a, node *b);
 
 /*Merge sort*/
-void mergesort (node **head);
+void mergesort(node **head);
