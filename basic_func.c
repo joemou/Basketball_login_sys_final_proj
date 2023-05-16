@@ -361,12 +361,17 @@ void print_player(node *node){
 } 
 
 void AVL_STRING_SEARCH(node *root,char *name){
-  int flag = strcmp(name, root->name);
-  if (flag!=0){
-    printf("Not found\n");
+
+  if(root==NULL){
+    printf("not found");
+    return;
   }
-  else if(flag==0){
+
+  int flag = strcmp(name, root->name);
+  
+  if(flag==0){
     print_player(root);
+    return;
   }
   else if(flag<0){
     return AVL_STRING_SEARCH(root->left, name);
