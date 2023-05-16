@@ -1,4 +1,6 @@
 
+node;
+
 /*AVL : Create node for AVL tree.*/
 void create(node **head, char *name, int score);
 
