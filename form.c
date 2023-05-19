@@ -50,13 +50,16 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, LIST_NAME, str1, LIST_GP, str2, LIST_MPG, str3, LIST_PPG, str4, LIST_TP, str5, LIST_FGM, str6, LIST_FG, str7, LIST_PM, str8, LIST_TO, str9, LIST_PF, str10, -1);
-
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
         gtk_list_store_set(store, &iter, LIST_NAME, str1, LIST_GP, str2, LIST_MPG, str3, LIST_PPG, str4, LIST_TP, str5, LIST_FGM, str6, LIST_FG, str7, LIST_PM, str8, LIST_TO, str9, LIST_PF, str10, -1);
     }
+    else
+    {
+        gtk_list_store_append(store, &iter); 
+        gtk_list_store_set(store, &iter, LIST_NAME, str1, LIST_GP, str2, LIST_MPG, str3, LIST_PPG, str4, LIST_TP, str5, LIST_FGM, str6, LIST_FG, str7, LIST_PM, str8, LIST_TO, str9, LIST_PF, str10, -1);
+    }
+
 
     gtk_widget_destroy(add_win);
 }
