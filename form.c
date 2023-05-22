@@ -60,7 +60,6 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
         gtk_list_store_set(store, &iter, LIST_NAME, str1, LIST_GP, str2, LIST_MPG, str3, LIST_PPG, str4, LIST_TP, str5, LIST_FGM, str6, LIST_FG, str7, LIST_PM, str8, LIST_TO, str9, LIST_PF, str10, -1);
     }
 
-
     gtk_widget_destroy(add_win);
 }
 
@@ -285,7 +284,8 @@ int main(int argc, char *argv[])
 
     GtkWidget *vbox;
     GtkWidget *hbox;
-
+    GtkWidget *searchEntry;
+    
     gtk_init(&argc, &argv);
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -293,6 +293,8 @@ int main(int argc, char *argv[])
     gtk_window_set_title(GTK_WINDOW(window), "Player Data");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
     gtk_widget_set_size_request(window, 370, 270);
+
+    searchEntry = gtk_search_entry_new();
 
     sw = gtk_scrolled_window_new(NULL, NULL);
     list = gtk_tree_view_new();
@@ -303,19 +305,30 @@ int main(int argc, char *argv[])
     gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(sw), GTK_SHADOW_ETCHED_IN);
 
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
-
+    
+    gtk_box_pack_start(GTK_BOX(vbox), searchEntry, FALSE, FALSE, 3);
     gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 5);
+    
 
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 
-    add = gtk_button_new_with_label("Add");
-    remove = gtk_button_new_with_label("Remove");
-    edit = gtk_button_new_with_label("Edit");
+    add = gtk_button_new();
+    remove = gtk_button_new();
+    edit = gtk_button_new();
+
+    GtkWidget *addImage = gtk_image_new_from_file("add.png");
+    gtk_button_set_image(GTK_BUTTON(add), addImage);
+
+    GtkWidget *editImage = gtk_image_new_from_file("edit.png");
+    gtk_button_set_image(GTK_BUTTON(edit), editImage);
+
+    GtkWidget *removeImage = gtk_image_new_from_file("remove.png");
+    gtk_button_set_image(GTK_BUTTON(remove), removeImage);
 
     gtk_box_pack_start(GTK_BOX(hbox), add, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), remove, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 3);
-
+    
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 3);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
