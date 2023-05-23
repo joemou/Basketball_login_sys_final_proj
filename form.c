@@ -1,34 +1,16 @@
 #include <gtk/gtk.h>
 
-enum
-{
-    LIST_NAME,
-    LIST_GP,
-    LIST_MPG,
-    LIST_PPG,
-    LIST_TP,
-    LIST_FGM,
-    LIST_FG,
-    LIST_PM,
-    LIST_TO,
-    LIST_PF,
-    N_COLUMNS
+enum {
+    LIST_NAME, LIST_GP, LIST_MPG, LIST_PPG, LIST_TP, LIST_FGM, LIST_FG, LIST_PM, LIST_TO, LIST_PF, N_COLUMNS
 };
 
-GtkWidget *list;
-GtkWidget *add_win;
-GtkWidget *entry_name;
-GtkWidget *entry_gp;
-GtkWidget *entry_mpg;
-GtkWidget *entry_ppg;
-GtkWidget *entry_tp;
-GtkWidget *entry_fgm;
-GtkWidget *entry_fg;
-GtkWidget *entry_pm;
-GtkWidget *entry_to;
-GtkWidget *entry_pf;
-GtkWidget *window;
+GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkTreeSelection *selection;
+
+void on_row_activated(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
+    
+     gtk_tree_selection_unselect_all(selection);    
+}
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
 {
@@ -70,12 +52,7 @@ void on_cancel_clicked(GtkWidget *button, gpointer data)
 
 GtkWidget *create_addwin()
 {
-    GtkWidget *win;
-    GtkWidget *vbox;
-    GtkWidget *grid;
-    GtkWidget *hbox;
-    GtkWidget *label;
-    GtkWidget *button;
+    GtkWidget *win, *vbox, *grid, *hbox, *label, *button;
 
     win = gtk_dialog_new_with_buttons("Add", GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL, NULL);
     gtk_container_set_border_width(GTK_CONTAINER(win), 10);
@@ -172,7 +149,7 @@ void remove_item(GtkWidget *widget, gpointer selection)
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
         gtk_list_store_remove(store, &iter);
-    }
+    }    
 }
 
 void edit_item(GtkWidget *widget, gpointer selection)
@@ -191,16 +168,8 @@ void edit_item(GtkWidget *widget, gpointer selection)
 
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
-        gchar *name;
-        gchar *gp;
-        gchar *mpg;
-        gchar *ppg;
-        gchar *tp;
-        gchar *fgm;
-        gchar *fg;
-        gchar *pm;
-        gchar *to;
-        gchar *pf;
+        gchar *name, *gp, *mpg, *ppg, *tp, *fgm, *fg, *pm, *to, *pf;
+
         gtk_tree_model_get(model, &iter, LIST_NAME, &name, LIST_GP, &gp, LIST_MPG, &mpg, LIST_PPG, &ppg, LIST_TP, &tp, LIST_FGM, &fgm, LIST_FG, &fg, LIST_PM, &pm, LIST_TO, &to, LIST_PF, &pf, -1);
 
         add_win = create_addwin();
@@ -275,16 +244,7 @@ void init_list(GtkWidget *list)
 
 int main(int argc, char *argv[])
 {
-
-    GtkWidget *sw;
-
-    GtkWidget *remove;
-    GtkWidget *add;
-    GtkWidget *edit;
-
-    GtkWidget *vbox;
-    GtkWidget *hbox;
-    GtkWidget *searchEntry;
+    GtkWidget *sw, *remove, *add, *edit, *vbox, *hbox, *searchEntry;
     
     gtk_init(&argc, &argv);
 
@@ -338,8 +298,9 @@ int main(int argc, char *argv[])
 
     g_signal_connect(G_OBJECT(add), "clicked", G_CALLBACK(append_item), NULL);
     g_signal_connect(G_OBJECT(remove), "clicked", G_CALLBACK(remove_item), selection);
-    g_signal_connect(G_OBJECT(edit), "clicked", G_CALLBACK(edit_item), selection);
+    g_signal_connect(G_OBJECT(edit), "clicked", G_CALLBACK(edit_item), selection);    	
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(list, "row-activated", G_CALLBACK(on_row_activated), selection);
 
     gtk_widget_show_all(window);
 
