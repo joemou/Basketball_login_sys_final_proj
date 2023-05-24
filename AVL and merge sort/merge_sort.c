@@ -1,6 +1,5 @@
 #include "basic_func.h"
 #include "merge_sort.h"
-#include "node.h"
 
 /*for merge sort*/
 void split(node *first,node **a,node **b){

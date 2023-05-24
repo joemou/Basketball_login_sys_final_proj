@@ -1,7 +1,6 @@
 #include "basic_func.h"
 #include "avl.h"
 #include "merge_sort.h"
-#include "node.h"
 
 int main(){
   int time,score;

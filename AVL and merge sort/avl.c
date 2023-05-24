@@ -1,6 +1,5 @@
 #include "basic_func.h"
 #include "avl.h"
-#include "node.h"
 
 void create(node **head,char *name,int score){
   node *temp = (node *)malloc(sizeof(node));
