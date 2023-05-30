@@ -3,6 +3,10 @@
 
 #define isContent1Visible TRUE
 
+GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
+GtkTreeSelection *selection;
+
+
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
      gtk_tree_selection_unselect_all(selection);    
