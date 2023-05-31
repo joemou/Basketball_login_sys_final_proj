@@ -288,6 +288,7 @@ void init_list(GtkWidget *list)
 
     g_object_unref(store);    
 }
+
 void on_search_activate(GtkEntry *entry, gpointer data) {
     const gchar *searchText = gtk_entry_get_text(entry);
     GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));
@@ -332,7 +333,7 @@ void create_after_window() {
 
     gtk_window_set_title(GTK_WINDOW(window), "Player Data");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
-    gtk_widget_set_size_request(window, 370, 270);
+    gtk_widget_set_size_request(window, 500, 400);
 
     searchEntry = gtk_search_entry_new();
 
@@ -390,8 +391,7 @@ void create_after_window() {
 }
 
 void on_button1_clicked(GtkWidget *widget, gpointer data) {
-    create_after_window();
-
     GtkWidget *current_window = gtk_widget_get_toplevel(widget);
     gtk_widget_destroy(current_window);
+    create_after_window();
 }
