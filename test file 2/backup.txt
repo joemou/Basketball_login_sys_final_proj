@@ -1,0 +1,7 @@
+{
+	"Basket_Ball_Teams":	[{
+			"Name":	"Los Angeles Lakers"
+		}, {
+			"Name":	"Golden State Warriors"
+		}]
+}
