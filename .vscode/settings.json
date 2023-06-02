@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "basic_func.h": "c",
-        "merge_sort.h": "c"
+        "merge_sort.h": "c",
+        "atomic": "c"
     }
 }

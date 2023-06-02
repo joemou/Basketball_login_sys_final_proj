@@ -43,17 +43,7 @@ void insert_new_user(struct hash_table *table, struct user *user) {
     json_create_new_team(user->username);
 }
 
-int find_user(struct hash_table *table) {
-    // prompt user to login
-    char username[50];
-    char password[50];
-    // printf("Login\n");
-    // printf("Enter username: ");
-    // scanf("%s", username);
-    // printf("Enter password: ");
-    // scanf("%s", password);
-
-
+int find_user(struct hash_table *table, char *username, char *password) {
     int index = hash(username);
     while (table->users[index] != NULL) {
         if (strcmp(table->users[index]->username, username) == 0 && strcmp(table->users[index]->password, password) == 0) {
@@ -136,35 +126,35 @@ void load_users(struct hash_table *table, char *filename) {
     fclose(fp);
 }
 
-int main() {
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
+// int main() {
+//     struct hash_table table;
+//     table.size = HASH_SIZE;
+//     table.users = malloc(sizeof(struct user *) * table.size);
+//     memset(table.users, 0, sizeof(struct user *) * table.size);
 
-    // load users from file
-    load_users(&table, "users.dat");
+//     // load users from file
+//     load_users(&table, "users.dat");
 
-    // create some sample users
-    int choice, Login_successful = 0;
-    while (Login_successful == 0) {
-        printf("1: Sign up\n2: Login\n");
-        scanf(" %d", &choice);
-        if (choice == 1) {
-            create_user(&table);
-        } else {
-            // authenticate user
-            if (find_user(&table)) {
-                printf("Login successful!\n\n");
-                Login_successful = 1;
-            } else {
-                printf("Login failed. Invalid username or password.\n\n");
-            }
-        }
-    }
+//     // create some sample users
+//     int choice, Login_successful = 0;
+//     while (Login_successful == 0) {
+//         printf("1: Sign up\n2: Login\n");
+//         scanf(" %d", &choice);
+//         if (choice == 1) {
+//             create_user(&table);
+//         } else {
+//             // authenticate user
+//             if (find_user(&table)) {
+//                 printf("Login successful!\n\n");
+//                 Login_successful = 1;
+//             } else {
+//                 printf("Login failed. Invalid username or password.\n\n");
+//             }
+//         }
+//     }
 
-    // save users to file before exiting
-    save_users(&table, "users.dat");
+//     // save users to file before exiting
+//     save_users(&table, "users.dat");
 
-    return 0;
-}
+//     return 0;
+// }

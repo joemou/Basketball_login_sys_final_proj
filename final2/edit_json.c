@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cJSON.h"
 #include "edit_json.h"
 
@@ -32,4 +33,20 @@ void json_create_new_team(char *new_team) {
     cJSON_free(team);
     cJSON_free(team_array);
     cJSON_free(tmp);
+}
+
+cJSON *find_team(char *username) {
+    char *data = read_json_to_str("data.json");
+    cJSON *team = cJSON_Parse(data);
+    cJSON *team_array = cJSON_GetObjectItem(team, "Basket_Ball_Teams");
+    int size = cJSON_GetArraySize(team_array);
+    cJSON *tgt_team;
+    for(int i = 0; i < size; i++) {
+        tgt_team = cJSON_GetArrayItem(team_array, i);
+        char *tmp_name = cJSON_GetStringValue(cJSON_GetObjectItem(tgt_team, "Name"));
+        if(strcmp(tmp_name, username) == 0) break;
+    }
+    cJSON *tgt_team_players_array = cJSON_GetObjectItem(tgt_team, "Players");
+
+    return tgt_team_players_array;
 }

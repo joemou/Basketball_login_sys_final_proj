@@ -1,15 +1,36 @@
 #include <gtk/gtk.h>
 #include "after.h"
 #include "sign_in.h"
+#include "edit_json.h"
+#include "cJSON.h"
 
 #define isContent1Visible TRUE
 
 GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkTreeSelection *selection;
+cJSON *team;
 
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
      gtk_tree_selection_unselect_all(selection);    
+}
+
+void init_player_data(cJSON *team) {
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
+    int size = cJSON_GetArraySize(team);
+    for(int i = 0; i < size; i++) {
+        cJSON *tmp = cJSON_GetArrayItem(team, i);
+        const gchar *name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Player Name"));
+    }
+
+    gtk_list_store_append(store, &iter); 
+    gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);
 }
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
@@ -390,53 +411,13 @@ void create_after_window() {
 
 }
 
-void on_button1_clicked(GtkWidget *widget, gpointer data) {
+void on_button1_clicked(char *username) {
 
-    // do login check
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
-
-    // load users from file
-    load_users(&table, "users.dat");
-
-    // create some sample users
-    int choice, Login_successful = 0;
-    while (Login_successful == 0) {
-        
-        // authenticate user
-        if (find_user(&table)) {
-            // printf("Login successful!\n\n");
-            
-            Login_successful = 1;
-        } else {
-            // printf("Login failed. Invalid username or password.\n\n");
-            // show unsuccesful
-        }
-        
-
-        /* original code
-        if (choice == 1) {
-            create_user(&table);
-        } else {
-            // authenticate user
-            if (find_user(&table)) {
-                // printf("Login successful!\n\n");
-                Login_successful = 1;
-            } else {
-                // printf("Login failed. Invalid username or password.\n\n");
-            }
-        }
-        */
-    }
-
-    // save users to file before exiting
-    save_users(&table, "users.dat");
+    // call avl which included the function below
+    // hence no need has dependency on edit_json.h
+    team = find_team(username);
     
-    if(1) {
-        GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-        gtk_widget_destroy(current_window);
-        create_after_window();
-    }
+    GtkWidget *current_window = gtk_widget_get_toplevel(widget);
+    gtk_widget_destroy(current_window);
+    create_after_window();
 }
