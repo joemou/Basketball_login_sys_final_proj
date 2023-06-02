@@ -27,10 +27,18 @@ void init_player_data(cJSON *team) {
     for(int i = 0; i < size; i++) {
         cJSON *tmp = cJSON_GetArrayItem(team, i);
         const gchar *name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Player Name"));
+        gint gp = 0;
+        gdouble mpg = 0;
+        gdouble ppg = 0;
+        gint tp = 0;
+        gint fgm = 0;
+        gdouble fg = 0;
+        gint pm = 0;
+        gint to = 0;
+        gint pf = 0;
+        gtk_list_store_append(store, &iter); 
+        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);
     }
-
-    gtk_list_store_append(store, &iter); 
-    gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);
 }
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
