@@ -12,5 +12,14 @@ log_in.o: log_in.c after.h
 after.o: after.c after.h
 	${CC} ${CFLAGS} -c after.c ${LIBS}
 
+avl.o: avl.c avl.h basic_func.h
+	${CC} -c avl.c
+
+merge_sort.o: merge_sort.c merge_sort.h basic_func.h
+	${CC} -c merge_sort.c
+
+cJSON.o: cJSON.c cJSON.h
+	${CC} -c cJSON.c
+
 clean: 
 	rm ${PROG}

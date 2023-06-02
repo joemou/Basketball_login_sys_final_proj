@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include "after.h"
-#include "log_in.h"
+#include "cJSON.h"
 
 void log_in() {
     GtkWidget *window;
@@ -67,6 +67,11 @@ void log_in() {
 }
 
 int main(int argc, char *argv[]) {
+
+    // pass json file in
+    // char *data = read_json_to_str("data.json");
+    // cJSON *team = cJSON_Parse(data);
+
     gtk_init(&argc, &argv);
 
     log_in();
