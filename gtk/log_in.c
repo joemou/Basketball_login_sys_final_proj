@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 #include "after.h"
-#include "log_in.h"
 
 void log_in() {
     GtkWidget *window;

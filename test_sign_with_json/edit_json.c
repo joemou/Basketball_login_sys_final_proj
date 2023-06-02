@@ -11,7 +11,6 @@ char *read_json_to_str(char *file_name) {
     rewind(file);
     char *json_file = (char*) calloc(size, sizeof(char));
     fread(json_file, 1, size, file);
-    printf("%s", json_file);
 
     fclose(file);
     
@@ -21,7 +20,6 @@ char *read_json_to_str(char *file_name) {
 void json_create_new_team(char *new_team) {
     char *data = read_json_to_str("data.json");
     cJSON *team = cJSON_Parse(data);
-    printf("%s", cJSON_Print(team));
     cJSON *team_array = cJSON_GetObjectItem(team, "Basket_Ball_Teams");
     cJSON *tmp = cJSON_CreateObject();
     cJSON_AddStringToObject(tmp, "Name", new_team);
