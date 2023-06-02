@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+// asd
 typedef struct node{
   char name[25];
   int score;
