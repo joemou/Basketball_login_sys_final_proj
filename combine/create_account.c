@@ -1,8 +1,12 @@
 #include <gtk/gtk.h>
 #include "create_account.h"
 #include "after.h"
+#include "sign_in.h"
 
 GtkWidget *error_label;
+GtkWidget *username_entry;
+GtkWidget *password_entry;
+GtkWidget *confirm_entry;
 
 gboolean check_username_exists(){
     return 0;
@@ -13,18 +17,32 @@ gboolean check_passwords_match(){
 };
 
 void create_account(GtkButton *button, gpointer user_data) {
-    gboolean passwords_match = check_passwords_match();
-    gboolean username_exists = check_username_exists();
 
-    if (!passwords_match || username_exists) {
-        gchar *error_message = NULL;
+    struct hash_table table;
+    table.size = HASH_SIZE;
+    table.users = malloc(sizeof(struct user *) * table.size);
+    memset(table.users, 0, sizeof(struct user *) * table.size);
 
-        error_message = g_strdup("-error-");
+    // load users from file
+    load_users(&table, "users.dat");
+
+    const gchar *username = gtk_entry_get_text(GTK_ENTRY(username_entry));
+    const gchar *password = gtk_entry_get_text(GTK_ENTRY(password_entry));
+    const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
+
+    if (strcmp(password, password2) == 0) {
+        struct user *new_user = malloc(sizeof(struct user));
+        strcpy(new_user->username, username);
+        strcpy(new_user->password, password);
+        insert_new_user(&table, new_user);
+        g_print("Sign Up successful!\n");
+    } else {
+        gchar *error_message = g_strdup("-error-");
 
         gtk_label_set_text(GTK_LABEL(error_label), error_message);
 
         g_free(error_message);
-        return;
+        // printf("The password entered twice is different\n\n");
     }
 }
 
@@ -73,16 +91,16 @@ void create_create_account_window(){
 
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
-    GtkWidget *username_entry = gtk_entry_new();
+    username_entry = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(vbox), username_entry, FALSE, FALSE, 0);
     gtk_entry_set_placeholder_text(GTK_ENTRY(username_entry), "Username");
 
-    GtkWidget *password_entry = gtk_entry_new();
+    password_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(password_entry), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), password_entry, FALSE, FALSE, 0);
     gtk_entry_set_placeholder_text(GTK_ENTRY(password_entry), "Password");
 
-    GtkWidget *confirm_entry = gtk_entry_new();
+    confirm_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(confirm_entry), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), confirm_entry, FALSE, FALSE, 0);
     gtk_entry_set_placeholder_text(GTK_ENTRY(confirm_entry), "Confirm Password");

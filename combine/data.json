@@ -1,0 +1,84 @@
+{
+	"Basket_Ball_Teams":	[{
+			"Name":	"Los Angeles Lakers",
+			"Players":	[{
+					"Player Name":	"Mo Bamba",
+					"game_played":	9,
+					"three_pt":	0.31299999356269836,
+					"pt_per_round":	3.7000000476837158
+				}, {
+					"Player Name":	"Malik Beasley",
+					"game_played":	26,
+					"three_pt":	0.3529999852180481,
+					"pt_per_round":	11.100000381469727
+				}, {
+					"Player Name":	"Troy Brown Jr.",
+					"game_played":	76,
+					"three_pt":	0.38100001215934753,
+					"pt_per_round":	7.0999999046325684
+				}, {
+					"Player Name":	"Max Christie",
+					"game_played":	41,
+					"three_pt":	0.41899999976158142,
+					"pt_per_round":	3.0999999046325684
+				}, {
+					"Player Name":	"Anthony Davis",
+					"game_played":	56,
+					"three_pt":	0.56300002336502075,
+					"pt_per_round":	25.899999618530273
+				}, {
+					"Player Name":	"Wenyen Gabriel",
+					"game_played":	68,
+					"three_pt":	0.59600001573562622,
+					"pt_per_round":	5.5
+				}, {
+					"Player Name":	"Rui Hachimura",
+					"game_played":	33,
+					"three_pt":	0.29600000381469727,
+					"pt_per_round":	11.199999809265137
+				}, {
+					"Player Name":	"LeBron James",
+					"game_played":	55,
+					"three_pt":	0.32100000977516174,
+					"pt_per_round":	28.899999618530273
+				}, {
+					"Player Name":	"Scotty Pippen Jr.",
+					"game_played":	6,
+					"three_pt":	0.33300000429153442,
+					"pt_per_round":	2.2999999523162842
+				}, {
+					"Player Name":	"Austin Reaves",
+					"game_played":	64,
+					"three_pt":	0.382999986410141,
+					"pt_per_round":	13
+				}, {
+					"Player Name":	"D'Angelo Russell",
+					"game_played":	17,
+					"three_pt":	0.414000004529953,
+					"pt_per_round":	17.399999618530273
+				}, {
+					"Player Name":	"Dennis Schröder",
+					"game_played":	67,
+					"three_pt":	0.32899999618530273,
+					"pt_per_round":	12.399999618530273
+				}, {
+					"Player Name":	"Cole Swider",
+					"game_played":	7,
+					"three_pt":	0.375,
+					"pt_per_round":	1.2999999523162842
+				}, {
+					"Player Name":	"Jarred Vanderbilt",
+					"game_played":	26,
+					"three_pt":	0.30300000309944153,
+					"pt_per_round":	7.1999998092651367
+				}, {
+					"Player Name":	"Lonnie Walker IV",
+					"game_played":	56,
+					"three_pt":	0.36500000953674316,
+					"pt_per_round":	11.699999809265137
+				}]
+		}, {
+			"Name":	"asd",
+			"Players":	[]
+		}]
+}

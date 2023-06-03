@@ -32,6 +32,6 @@ void on_search_activate(GtkEntry *entry, gpointer data);
 
 void create_after_window();
 
-void on_button1_clicked(GtkWidget *widget, gpointer data);
+// void on_button1_clicked(GtkWidget *widget, gpointer data);
 
 #endif
