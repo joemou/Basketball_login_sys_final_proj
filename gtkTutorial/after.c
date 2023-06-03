@@ -284,6 +284,7 @@ void init_list(GtkWidget *list)
 
     g_object_unref(store);    
 }
+
 void on_search_activate(GtkEntry *entry, gpointer data) {
     const gchar *searchText = gtk_entry_get_text(entry);
     GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));

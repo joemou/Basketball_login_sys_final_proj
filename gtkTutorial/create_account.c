@@ -83,7 +83,7 @@ void create_create_account_window(){
 
     GtkWidget *button_cancel = gtk_button_new_with_label("Cancel");
     gtk_box_pack_start(GTK_BOX(vbox), button_cancel, FALSE, FALSE, 0);
-    g_signal_connect(button_sign, "clicked", G_CALLBACK(on_cancel_clicked), NULL);
+    g_signal_connect(button_cancel, "clicked", G_CALLBACK(on_cancel_clicked), NULL);
 
     GtkWidget *button_sign = gtk_button_new_with_label("Sign Up");
     gtk_box_pack_start(GTK_BOX(vbox), button_sign, FALSE, FALSE, 0);
