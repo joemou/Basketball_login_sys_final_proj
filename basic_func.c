@@ -341,9 +341,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
           prev->next = temp2->next;
         }
 
-        printf("b\n\n");
       }
-      free(temp);
     }
     //two children 
     else {
@@ -357,7 +355,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 
       //delete the copied node
       root->right = delete(head, point, root->right, temp->name);
-      printf("c\n");
+      
     }
 
   }
@@ -446,7 +444,7 @@ int main(){
   char name[25];
 
   while(time--){
-    printf("Enter name & game_played:");
+    printf("Enter name & game_played & feiled_goal_percentage & three_point_percentage & points_per_game & steal_per_game:");
     scanf(" %s %d %f %f %f %f", name, &game_played, &feiled_goal_percentage, &three_point_percentage, &points_per_game, &steal_per_game);
     create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);//create link list
     root = insert(root,head);//create avl tree
