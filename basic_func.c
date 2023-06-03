@@ -4,7 +4,12 @@
 
 typedef struct node{
   char name[25];
-  int score;
+  int game_played;
+  float feiled_goal_percentage;
+  float three_point_percentage;
+  float points_per_game;
+  float steal_per_game;
+
   int height;
   
   struct node *next;//for link list pointer
@@ -14,12 +19,12 @@ typedef struct node{
 } node;
 
 //for crate node
-void create(node **head, char *name, int score);
+void create(node **head, char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game);
 
 //for mergesort
 void split(node *first, node **a, node **b);
-struct node *merge(node *a, node *b);
-void mergesort(node **head);
+struct node *merge(node *a, node *b,int action);
+void mergesort(node **head,int action);
 
 //for avl tree and search
 int height(struct node *node);
@@ -39,10 +44,16 @@ void printInorder(struct node *node);
 
 /*for create the node*/
 //insert node at head
-void create(node **head,char *name,int score){
+void create(node **head, char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
   node *temp = (node *)malloc(sizeof(node));
+  
   strcpy(temp->name, name);
-  temp->score = score;
+  temp->game_played = game_played;
+  temp->feiled_goal_percentage = feiled_goal_percentage;
+  temp->three_point_percentage = three_point_percentage;
+  temp->points_per_game = points_per_game;
+  temp->steal_per_game = steal_per_game;
+
   temp->next = NULL;
   temp->right = NULL;
   temp->left = NULL;
@@ -88,7 +99,7 @@ void split(node *first,node **a,node **b){
 }
 
 //merge the node
-struct node *merge(node *a,node *b){
+struct node *merge(node *a,node *b,int action){
 
   node *result;
 
@@ -99,18 +110,43 @@ struct node *merge(node *a,node *b){
     return a;
   }
 
-  if(a->score>b->score){
+  float x = -1, y = -1;
+
+  switch(action){
+    case 1:
+      x = a->game_played;
+      y = b->game_played;
+      break; 
+    case 2:
+      x = a->feiled_goal_percentage;
+      y = b->feiled_goal_percentage;
+      break;
+    case 3:
+      x = a->three_point_percentage;
+      y = b->three_point_percentage;
+      break;
+    case 4:
+      x = a->points_per_game;
+      y = b->points_per_game;
+      break;
+    case 5:
+      x = a->steal_per_game;
+      y = b->steal_per_game;
+      break;
+  }
+
+  if(x>y){
     result = a;
-    result->next = merge(a->next, b);
+    result->next = merge(a->next, b,action);
   }
   else{
     result = b;
-    result->next = merge(b->next, a);
+    result->next = merge(b->next, a,action);
   }
 
   return result;
 }
-void mergesort (node **head){
+void mergesort (node **head,int action){
   node *first = *head;
   node *a;
   node *b;
@@ -121,10 +157,12 @@ void mergesort (node **head){
 
   split(first, &a, &b);
 
-  mergesort(&a);
-  mergesort(&b);
+  mergesort(&a,action);
+  mergesort(&b,action);
 
-  *head = merge(a,b);
+  
+
+  *head = merge(a,b,action);
 }
 /*end for merge sort*/
 
@@ -140,7 +178,7 @@ void printInorder(struct node* node)
     return;
   }
   printInorder(node->left);
-  printf("%s %d\n", node->name,node->score);
+  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
   printInorder(node->right);
 }
 /*end for inorder traversal*/
@@ -315,7 +353,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 
       //copy the temp data and rewrite root
       strcpy(root->name, temp->name);
-      root->score = temp->score;
+      root->game_played = temp->game_played;
 
       //delete the copied node
       root->right = delete(head, point, root->right, temp->name);
@@ -357,7 +395,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 }
 
 void print_player(node *node){
-  printf("%s %d",node->name,node->score);
+  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
 void AVL_STRING_SEARCH(node *root,char *name){
@@ -387,16 +425,17 @@ void AVL_STRING_SEARCH(node *root,char *name){
 /*for printing linklist */
 void print_linklist(node *head){
   node *temp = head;
-  printf("name score\n");
+  printf("\n");
   while(temp!=NULL){
-    printf("%s %d\n",temp->name,temp->score);
+    printf("%s %d %.2f %.2f %.2f %.2f\n",temp->name,temp->game_played,temp->feiled_goal_percentage,temp->three_point_percentage,temp->points_per_game,temp->steal_per_game);
     temp = temp->next;
   }
 }
 /*end for printing linklist*/
 
 int main(){
-  int time,score;
+  int time,game_played;
+  float feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game;
 
   printf("Number of records you want to key in:");
   scanf("%d", &time);
@@ -407,21 +446,21 @@ int main(){
   char name[25];
 
   while(time--){
-    printf("Enter name & score:");
-    scanf(" %s %d", name, &score);
-    create(&head, name, score);//create link list
+    printf("Enter name & game_played:");
+    scanf(" %s %d %f %f %f %f", name, &game_played, &feiled_goal_percentage, &three_point_percentage, &points_per_game, &steal_per_game);
+    create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);//create link list
     root = insert(root,head);//create avl tree
   }
-  mergesort(&head);
 
   int action = -1;
   char search_name[25];
   printf("\n0.exit\n");
-  printf("1.print player orederd by socre\n");
-  printf("2.print player orederd by name alphabet(INORDER)\n");
+  printf("1.print player\n");
+  printf("2.print player orederd by name alphabet(INORDER)(From AVL TREE)\n");
   printf("3.insert the player\n");
   printf("4.delete the player by input name\n");
-  printf("5.search player by input name\n\n");
+  printf("5.search player by input name\n");
+  printf("6.change order(sort by what u want)\n\n");
   printf("action: ");
 
   while(scanf("%d",&action)!=0){
@@ -433,11 +472,10 @@ int main(){
         printInorder(root);
         break;
       case 3:
-        printf("Enter name & score:");
-        scanf(" %s %d", name, &score);
-        create(&head, name, score);//create link list
+        printf("Enter name & game_played:");
+        scanf(" %s %d %f %f %f %f", name, &game_played, &feiled_goal_percentage, &three_point_percentage, &points_per_game, &steal_per_game);
+        create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);//create link list
         root = insert(root,head);//create avl tree
-        mergesort(&head);//sort
         printf("inserted successfully\n");
         break;
       case 4:
@@ -451,7 +489,23 @@ int main(){
         scanf("%s", search_name);
         AVL_STRING_SEARCH(root, search_name);
         break;
+      case 6:
+        printf("ordered by what?\n");
+        printf("1.game_played\n2.feiled_goal_percentage\n3.three_point_percentage\n4.points_per_game\n5.float steal_per_game\n\naction:");
+        scanf("%d",&action);
+        mergesort(&head,action);
+        printf("\nordered compeleted\n\n");
+        print_linklist(head);
+        break;
     }
+    
+    printf("\n0.exit\n");
+    printf("1.print player\n");
+    printf("2.print player orederd by name alphabet(INORDER)(From AVL TREE)\n");
+    printf("3.insert the player\n");
+    printf("4.delete the player by input name\n");
+    printf("5.search player by input name\n");
+    printf("6.change order(sort by what u want)\n\n");
     printf("\naction: ");
   }
 }
@@ -460,24 +514,32 @@ int main(){
 
 test case:
 
-10
-joe 100
-bob 45
-apple 56
-nui 34
-kyle 90
-aufwiderzen 78
-zebra 28
-monica 10000
-jordan 3232223
-hao 100009
+25
+joe_mou 75 0.526 0.382 22.4 1.8
+alex_lee 62 0.483 0.321 18.6 1.2
+david_wu 81 0.572 0.401 25.8 1.5
+chris_tan 68 0.507 0.349 16.2 1.1
+eric_zhang 70 0.543 0.398 19.9 1.4
+jason_li 79 0.526 0.365 20.5 1.3
+matt_wang 77 0.519 0.392 17.8 0.9
+ben_chen 73 0.508 0.333 15.7 0.8
+kevin_huang 67 0.490 0.314 13.4 0.7
+ryan_yu 80 0.538 0.401 21.6 1.6
+nick_lin 72 0.501 0.361 14.9 1.0
+sam_wei 69 0.486 0.329 12.8 0.6
+andrew_ma 76 0.518 0.394 18.2 0.9
+mark_gao 65 0.475 0.305 11.5 0.5
+sean_liu 74 0.532 0.378 19.1 1.2
+tim_cheng 71 0.504 0.356 13.8 0.7
+daniel_ho 78 0.529 0.388 20.9 1.4
+justin_su 66 0.481 0.315 12.1 0.6
+adam_chu 82 0.559 0.413 23.7 1.7
+jerry_wong 63 0.495 0.338 15.1 1.0
+tony_luo 68 0.507 0.359 14.6 1.1
+steve_wang 75 0.526 0.382 16.9 0.8
+brian_zhu 70 0.511 0.368 13.7 0.7
+alex_liu 77 0.532 0.394 19.8 1.3
+david_chen 72 0.500 0.354 15.3 0.9
 
 
-
-5
-a 1
-b 2
-c 3
-d 4
-e 5
 */

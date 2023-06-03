@@ -35,6 +35,8 @@
       "line.h": "c",
       "string.h": "c",
       "array": "c",
-      "string": "c"
+      "e569_00245_Uncompress.C": "cpp",
+      "string": "c",
+      "stdio.h": "c"
     }
   }
