@@ -1,11 +1,6 @@
 #include <gtk/gtk.h>
-#include <stdio.h>
 #include "after.h"
-#include "cJSON.h"
-#include "edit_json.h"
-#include "sign_in.h"
 
-#define debug printf("hi");
 #define isContent1Visible TRUE
 
 GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
@@ -14,27 +9,6 @@ GtkTreeSelection *selection;
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
      gtk_tree_selection_unselect_all(selection);    
-}
-
-void show_data() {
-    GtkListStore *store;
-    GtkTreeIter iter;
-
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-    debug;
-    // reads from json for tmp
-    char *data = read_json_to_str("data.json");
-    cJSON *team = cJSON_Parse(data);
-    cJSON *team1 = cJSON_GetObjectItem(cJSON_GetArrayItem(cJSON_GetObjectItem(team, "Basket_Ball_Teams"), 0), "Players");
-    int size = cJSON_GetArraySize(team1);
-    for(int i = 0; i < size; ++i){
-        cJSON *tmp = cJSON_GetArrayItem(team1, i);
-        char *name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Player Name"));
-        int gp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "game_played"));
-        
-        gtk_list_store_append(store, &iter); 
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp);
-    }
 }
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
@@ -144,8 +118,6 @@ GtkWidget *create_addwin()
     gtk_container_add(GTK_CONTAINER(content_area), vbox);
 
     g_signal_connect(G_OBJECT(win), "delete_event", G_CALLBACK(gtk_widget_destroy), win);
-
-    // show_data();
 
     gtk_widget_show_all(win);
 
@@ -354,13 +326,13 @@ void on_search_activate(GtkEntry *entry, gpointer data) {
 }
 
 void create_after_window() {
-    GtkWidget *sw, *remove, *add, *edit, *vbox, *hbox, *searchEntry;
+    GtkWidget *sw, *remove, *add, *edit, *io, *print_all , *vbox, *hbox, *searchEntry;
    
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(window), "Player Data");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
-    gtk_widget_set_size_request(window, 500, 400);
+    gtk_widget_set_size_request(window, 600, 600);
 
     searchEntry = gtk_search_entry_new();
 
@@ -383,6 +355,8 @@ void create_after_window() {
     add = gtk_button_new();
     remove = gtk_button_new();
     edit = gtk_button_new();
+    io = gtk_button_new();
+    print_all = gtk_button_new();
 
     GtkWidget *addImage = gtk_image_new_from_file("add.png");
     gtk_button_set_image(GTK_BUTTON(add), addImage);
@@ -393,10 +367,18 @@ void create_after_window() {
     GtkWidget *removeImage = gtk_image_new_from_file("remove.png");
     gtk_button_set_image(GTK_BUTTON(remove), removeImage);
 
+    GtkWidget *ioImage = gtk_image_new_from_file("printall.png");
+    gtk_button_set_image(GTK_BUTTON(io), ioImage);
+
+    GtkWidget *printallImage = gtk_image_new_from_file("io.png");
+    gtk_button_set_image(GTK_BUTTON(print_all), printallImage);
+
     gtk_box_pack_start(GTK_BOX(hbox), add, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), remove, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 3);
-    
+    gtk_box_pack_start(GTK_BOX(hbox), io, TRUE, TRUE, 3);
+    gtk_box_pack_start(GTK_BOX(hbox), print_all, TRUE, TRUE, 3);
+
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 3);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
@@ -418,40 +400,8 @@ void create_after_window() {
 }
 
 void on_button1_clicked(GtkWidget *widget, gpointer data) {
+    GtkWidget *current_window = gtk_widget_get_toplevel(widget);
+    gtk_widget_destroy(current_window);
 
-    // call "login.h" and do login check
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
-
-    // load users from file
-    load_users(&table, "users.dat");
-
-    int choice, Login_successful = 0;
-        
-    // read input
-    printf("1: Sign up\n2: Login\n");
-    
-    scanf(" %d", &choice);
-    if (choice == 1) {
-        create_user(&table);
-    } else {
-        // authenticate user
-        if (find_user(&table)) {
-            // login successful
-            Login_successful = 1;
-        } else {
-            // login failed
-        }
-    }
-
-    // save users to file before exiting
-    save_users(&table, "users.dat");
-
-    if(Login_successful) {
-        GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-        gtk_widget_destroy(current_window);
-        create_after_window();
-    }
+    create_after_window();
 }

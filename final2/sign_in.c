@@ -5,19 +5,6 @@
 #include "edit_json.h"
 #include "sign_in.h"
 
-// #define HASH_SIZE 10000
-
-// struct user {
-//     char username[50];
-//     char password[50];
-//     // other fields here
-// };
-
-// struct hash_table {
-//     int size;
-//     struct user **users;
-// };
-
 int hash(const char *str) {
     int sum = 0;
     for (int i = 0; str[i] != '\0'; i++) {
