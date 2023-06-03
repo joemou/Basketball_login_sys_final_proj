@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "after.h"
+#include "sign_in.h"
 
 void log_in() {
     GtkWidget *window;
@@ -11,8 +12,8 @@ void log_in() {
     GtkWidget *subtitle;
     PangoAttrList *attr_list;
     PangoAttribute *attr;
-    gchar *username;
-    gchar *password;
+    const gchar *username;
+    const gchar *password;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
@@ -73,8 +74,8 @@ void log_in() {
     while (Login_successful == 0) {
         
         // authenticate user
-        username = gtk_entry_get_text(entry1);
-        password = gtk_entry_get_text(entry2);
+        username = gtk_entry_get_text(GTK_ENTRY(entry1));
+        password = gtk_entry_get_text(GTK_ENTRY(entry2));
         if (find_user(&table, username, password)) {
             // printf("Login successful!\n\n");
             Login_successful = 1;
@@ -103,7 +104,7 @@ void log_in() {
     save_users(&table, "users.dat");
 
     // can call on_button1_clicked because if loop broke, login successful
-    on_button1_clicked(username);
+    on_button1_clicked(button1, username);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     gtk_container_add(GTK_CONTAINER(window), fixed);

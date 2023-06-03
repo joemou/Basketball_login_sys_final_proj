@@ -80,5 +80,8 @@
 		}, {
 			"Name":	"qwe",
 			"Players":	[]
+		}, {
+			"Name":	"asd",
+			"Players":	[]
 		}]
 }

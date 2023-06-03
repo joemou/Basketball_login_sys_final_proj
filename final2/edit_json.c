@@ -35,7 +35,7 @@ void json_create_new_team(char *new_team) {
     cJSON_free(tmp);
 }
 
-cJSON *find_team(char *username) {
+cJSON *find_team(const char *username) {
     char *data = read_json_to_str("data.json");
     cJSON *team = cJSON_Parse(data);
     cJSON *team_array = cJSON_GetObjectItem(team, "Basket_Ball_Teams");

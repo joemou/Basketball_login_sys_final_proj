@@ -2,6 +2,10 @@
     "files.associations": {
         "basic_func.h": "c",
         "merge_sort.h": "c",
-        "atomic": "c"
+        "atomic": "c",
+        "after.h": "c",
+        "cjson.h": "c",
+        "edit_json.h": "c",
+        "sign_in.h": "c"
     }
 }

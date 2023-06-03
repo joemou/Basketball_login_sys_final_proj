@@ -1,3 +1,4 @@
+#define HASH_SIZE 10000
 
 struct user {
     char username[50];
@@ -10,9 +11,9 @@ struct hash_table {
     struct user **users;
 };
 
-int hash(char *str);
+int hash(const char *str);
 void insert_user(struct hash_table *table, struct user *user);
-int find_user(struct hash_table *table, char *username, char *password);
+int find_user(struct hash_table *table, const char *username, const char *password);
 void create_user(struct hash_table *table);
 void save_users(struct hash_table *table, char *filename);
 void load_users(struct hash_table *table, char *filename);

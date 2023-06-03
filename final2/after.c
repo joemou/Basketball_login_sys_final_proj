@@ -419,7 +419,7 @@ void create_after_window() {
 
 }
 
-void on_button1_clicked(char *username) {
+void on_button1_clicked(GtkWidget *widget, const char *username) {
 
     // call avl which included the function below
     // hence no need has dependency on edit_json.h
