@@ -1,44 +1,14 @@
 #include <gtk/gtk.h>
 #include "after.h"
-#include "sign_in.h"
-#include "edit_json.h"
-#include "cJSON.h"
 
 #define isContent1Visible TRUE
 
 GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkTreeSelection *selection;
-cJSON *team;
 
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
      gtk_tree_selection_unselect_all(selection);    
-}
-
-void init_player_data(cJSON *team) {
-    GtkListStore *store;
-    GtkTreeIter iter;
-    GtkTreeModel *model;
-
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
-
-    int size = cJSON_GetArraySize(team);
-    for(int i = 0; i < size; i++) {
-        cJSON *tmp = cJSON_GetArrayItem(team, i);
-        const gchar *name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Player Name"));
-        gint gp = 0;
-        gdouble mpg = 0;
-        gdouble ppg = 0;
-        gint tp = 0;
-        gint fgm = 0;
-        gdouble fg = 0;
-        gint pm = 0;
-        gint to = 0;
-        gint pf = 0;
-        gtk_list_store_append(store, &iter); 
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);
-    }
 }
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
@@ -408,7 +378,7 @@ void create_after_window() {
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), io, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), print_all, TRUE, TRUE, 3);
-    
+
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 3);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
@@ -429,12 +399,7 @@ void create_after_window() {
 
 }
 
-void on_button1_clicked(GtkWidget *widget, const char *username) {
-
-    // call avl which included the function below
-    // hence no need has dependency on edit_json.h
-    team = find_team(username);
-    
+void on_button1_clicked(GtkWidget *widget, gpointer data) {
     GtkWidget *current_window = gtk_widget_get_toplevel(widget);
     gtk_widget_destroy(current_window);
 

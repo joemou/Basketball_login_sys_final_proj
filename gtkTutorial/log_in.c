@@ -1,9 +1,10 @@
 #include <gtk/gtk.h>
 #include "after.h"
-#include "sign_in.h"
 #include "create_account.h"
 
-void log_in() {
+int main(int argc, char *argv[]) {
+    gtk_init(&argc, &argv);
+
     GtkWidget *window;
     GtkWidget *fixed;
     GtkWidget *entry1;
@@ -14,8 +15,6 @@ void log_in() {
     GtkWidget *subtitle;
     PangoAttrList *attr_list;
     PangoAttribute *attr;
-    const gchar *username;
-    const gchar *password;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
@@ -65,64 +64,14 @@ void log_in() {
     gtk_widget_show(title);
     gtk_widget_show(subtitle);
 
-    // first do login check then click button1
-    // g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
-
-    // load users from file
-    load_users(&table, "users.dat");
-
-    // create some sample users
-    int choice, Login_successful = 0;
-    while (Login_successful == 0) {
-        
-        // authenticate user
-        username = gtk_entry_get_text(GTK_ENTRY(entry1));
-        password = gtk_entry_get_text(GTK_ENTRY(entry2));
-        if (find_user(&table, username, password)) {
-            // printf("Login successful!\n\n");
-            Login_successful = 1;
-        } else {
-            // printf("Login failed. Invalid username or password.\n\n");
-            // show unsuccesful
-        }
-        
-
-        /* original code
-        if (choice == 1) {
-            create_user(&table);
-        } else {
-            // authenticate user
-            if (find_user(&table)) {
-                // printf("Login successful!\n\n");
-                Login_successful = 1;
-            } else {
-                // printf("Login failed. Invalid username or password.\n\n");
-            }
-        }
-        */
-    }
-
-    // save users to file before exiting
-    save_users(&table, "users.dat");
-
-    // can call on_button1_clicked because if loop broke, login successful
-    on_button1_clicked(button1, username);
+    g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
+    g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     gtk_container_add(GTK_CONTAINER(window), fixed);
     gtk_widget_show_all(window);
 
     gtk_main();
-}
-
-int main(int argc, char *argv[]) {
-    gtk_init(&argc, &argv);
-
-    log_in();
 
     return 0;
 }

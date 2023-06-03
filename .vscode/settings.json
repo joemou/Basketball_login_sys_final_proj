@@ -6,6 +6,7 @@
         "after.h": "c",
         "cjson.h": "c",
         "edit_json.h": "c",
-        "sign_in.h": "c"
+        "sign_in.h": "c",
+        "create_account.h": "c"
     }
 }
