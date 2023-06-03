@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "after.h"
+#include "create_account.h"
 
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
@@ -9,13 +10,14 @@ int main(int argc, char *argv[]) {
     GtkWidget *entry1;
     GtkWidget *entry2;
     GtkWidget *button1;
+    GtkWidget *button2;
     GtkWidget *title;
     GtkWidget *subtitle;
     PangoAttrList *attr_list;
     PangoAttribute *attr;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(window), 600, 400);
+    gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
 
     fixed = gtk_fixed_new();
 
@@ -25,8 +27,11 @@ int main(int argc, char *argv[]) {
     gtk_entry_set_placeholder_text(GTK_ENTRY(entry2), "Password");
     gtk_entry_set_visibility(GTK_ENTRY(entry2), FALSE);
 
-    button1 = gtk_button_new_with_label("SIGN IN");
+    button1 = gtk_button_new_with_label("LOG IN");
     gtk_widget_set_size_request(button1, 165, 20);
+
+    button2 = gtk_button_new_with_label("SIGN UP");
+    gtk_widget_set_size_request(button2, 165, 20);
 
     title = gtk_label_new("PLAYER DATA");
     attr_list = pango_attr_list_new();
@@ -40,7 +45,7 @@ int main(int argc, char *argv[]) {
     gtk_label_set_attributes(GTK_LABEL(title), attr_list);
     pango_attr_list_unref(attr_list);
 
-    subtitle = gtk_label_new("SIGN IN");
+    subtitle = gtk_label_new("LOG IN");
     attr_list = pango_attr_list_new();
     attr = pango_attr_weight_new(PANGO_WEIGHT_BOLD);
     pango_attr_list_insert(attr_list, attr);
@@ -49,16 +54,18 @@ int main(int argc, char *argv[]) {
     gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
     pango_attr_list_unref(attr_list);
 
-    gtk_fixed_put(GTK_FIXED(fixed), button1, 100, 270);
-    gtk_fixed_put(GTK_FIXED(fixed), entry1, 100, 150);
-    gtk_fixed_put(GTK_FIXED(fixed), entry2, 100, 200);
-    gtk_fixed_put(GTK_FIXED(fixed), title, 100, 50);
-    gtk_fixed_put(GTK_FIXED(fixed), subtitle, 125, 100);
+    gtk_fixed_put(GTK_FIXED(fixed), title, 225, 150);
+    gtk_fixed_put(GTK_FIXED(fixed), subtitle, 275, 200);
+    gtk_fixed_put(GTK_FIXED(fixed), entry1, 225, 250);
+    gtk_fixed_put(GTK_FIXED(fixed), entry2, 225, 300);
+    gtk_fixed_put(GTK_FIXED(fixed), button2, 225, 350);
+    gtk_fixed_put(GTK_FIXED(fixed), button1, 225, 400);
 
     gtk_widget_show(title);
     gtk_widget_show(subtitle);
 
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
+    /*g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);*/
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
     gtk_container_add(GTK_CONTAINER(window), fixed);

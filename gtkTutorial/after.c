@@ -3,10 +3,6 @@
 
 #define isContent1Visible TRUE
 
-GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
-GtkTreeSelection *selection;
-
-
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
      gtk_tree_selection_unselect_all(selection);    
@@ -326,13 +322,13 @@ void on_search_activate(GtkEntry *entry, gpointer data) {
 }
 
 void create_after_window() {
-    GtkWidget *sw, *remove, *add, *edit, *vbox, *hbox, *searchEntry;
+    GtkWidget *sw, *remove, *add, *edit, *io, *print_all , *vbox, *hbox, *searchEntry;
    
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(window), "Player Data");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
-    gtk_widget_set_size_request(window, 370, 270);
+    gtk_widget_set_size_request(window, 600, 600);
 
     searchEntry = gtk_search_entry_new();
 
@@ -355,6 +351,8 @@ void create_after_window() {
     add = gtk_button_new();
     remove = gtk_button_new();
     edit = gtk_button_new();
+    io = gtk_button_new();
+    print_all = gtk_button_new();
 
     GtkWidget *addImage = gtk_image_new_from_file("add.png");
     gtk_button_set_image(GTK_BUTTON(add), addImage);
@@ -365,10 +363,18 @@ void create_after_window() {
     GtkWidget *removeImage = gtk_image_new_from_file("remove.png");
     gtk_button_set_image(GTK_BUTTON(remove), removeImage);
 
+    GtkWidget *ioImage = gtk_image_new_from_file("printall.png");
+    gtk_button_set_image(GTK_BUTTON(io), ioImage);
+
+    GtkWidget *printallImage = gtk_image_new_from_file("io.png");
+    gtk_button_set_image(GTK_BUTTON(print_all), printallImage);
+
     gtk_box_pack_start(GTK_BOX(hbox), add, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), remove, TRUE, TRUE, 3);
     gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 3);
-    
+    gtk_box_pack_start(GTK_BOX(hbox), io, TRUE, TRUE, 3);
+    gtk_box_pack_start(GTK_BOX(hbox), print_all, TRUE, TRUE, 3);
+
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, TRUE, 3);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
@@ -390,8 +396,8 @@ void create_after_window() {
 }
 
 void on_button1_clicked(GtkWidget *widget, gpointer data) {
-    create_after_window();
-
     GtkWidget *current_window = gtk_widget_get_toplevel(widget);
     gtk_widget_destroy(current_window);
+
+    create_after_window();
 }
