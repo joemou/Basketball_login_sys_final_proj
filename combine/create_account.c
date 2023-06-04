@@ -1,6 +1,5 @@
 #include <gtk/gtk.h>
 #include "create_account.h"
-#include "after.h"
 #include "sign_in.h"
 
 GtkWidget *error_label;

@@ -12,7 +12,7 @@ log_in.o: log_in.c after.h create_account.h sign_in.h
 after.o: after.c after.h
 	${CC} ${CFLAGS} -c after.c ${LIBS}
 
-create_account.o: create_account.c create_account.h after.h sign_in.h
+create_account.o: create_account.c create_account.h sign_in.h
 	${CC} ${CFLAGS} -c create_account.c ${LIBS}
 
 sign_in.o: sign_in.c sign_in.h edit_json.h
