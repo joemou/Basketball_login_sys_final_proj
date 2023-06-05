@@ -27,6 +27,8 @@ int main() {
     int game_played[] = {9, 26, 76, 41, 56, 68, 33, 55, 6, 64, 17, 67, 7, 26, 56};
     float three_pt[] = {.313, .353, .381, .419, .563, .596, .296, .321, .333, .383, .414, .329, .375, .303, .365};
     float pt_per_round[] = {3.7, 11.1, 7.1, 3.1, 25.9, 5.5, 11.2, 28.9, 2.3, 13.0, 17.4, 12.4, 1.3, 7.2, 11.7};
+    float field_goal_percentage[] = {.407, .392,.430, .415, .257, .596, .485, .500, .333, .519, .484, .415, .333, .529, .448};
+    float steals_per_game[] = {.1, .8, .8, .2, 1.1, .4, .2, .9, .3, .5, .6, .7, .0, 1.2, .5};
 
     char *json_file = read_json_to_str("data.json");
 
@@ -38,10 +40,12 @@ int main() {
         cJSON *players = cJSON_GetObjectItem(authed_team, "Players");
         for(int j = 0; j < 15; ++j){
             cJSON *player = cJSON_CreateObject();
-            cJSON_AddStringToObject(player, "Player Name", name[j]);
-            cJSON_AddNumberToObject(player, "game_played", game_played[j]);
-            cJSON_AddNumberToObject(player, "three_pt", three_pt[j]);
-            cJSON_AddNumberToObject(player, "pt_per_round", pt_per_round[j]);
+            cJSON_AddStringToObject(player, "Name", name[j]);
+            cJSON_AddNumberToObject(player, "GP", game_played[j]);
+            cJSON_AddNumberToObject(player, "3P", three_pt[j]);
+            cJSON_AddNumberToObject(player, "PPG", pt_per_round[j]);
+            cJSON_AddNumberToObject(player, "FG", field_goal_percentage[j]);
+            cJSON_AddNumberToObject(player, "SPG", steals_per_game[j]);
             
             cJSON_AddItemToArray(players, player);
         }

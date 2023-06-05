@@ -1,10 +1,16 @@
 #include "basic_func.h"
 #include "avl.h"
 
-void create(node **head,char *name,int score){
+void create(node **head, char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
   node *temp = (node *)malloc(sizeof(node));
+  
   strcpy(temp->name, name);
-  temp->score = score;
+  temp->game_played = game_played;
+  temp->feiled_goal_percentage = feiled_goal_percentage;
+  temp->three_point_percentage = three_point_percentage;
+  temp->points_per_game = points_per_game;
+  temp->steal_per_game = steal_per_game;
+
   temp->next = NULL;
   temp->right = NULL;
   temp->left = NULL;
@@ -27,7 +33,7 @@ void printInorder(struct node* node) {
     return;
   }
   printInorder(node->left);
-  printf("%s %d\n", node->name,node->score);
+  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
   printInorder(node->right);
 }
 
@@ -182,9 +188,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
           prev->next = temp2->next;
         }
 
-        printf("b\n\n");
       }
-      free(temp);
     }
     //two children 
     else {
@@ -194,11 +198,11 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 
       //copy the temp data and rewrite root
       strcpy(root->name, temp->name);
-      root->score = temp->score;
+      root->game_played = temp->game_played;
 
       //delete the copied node
       root->right = delete(head, point, root->right, temp->name);
-      printf("c\n");
+      
     }
 
   }
@@ -236,7 +240,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 }
 
 void print_player(node *node){
-  printf("%s %d",node->name,node->score);
+  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
 void AVL_STRING_SEARCH(node *root,char *name){
@@ -262,9 +266,9 @@ void AVL_STRING_SEARCH(node *root,char *name){
 
 void print_linklist(node *head){
   node *temp = head;
-  printf("name score\n");
+  printf("\n");
   while(temp!=NULL){
-    printf("%s %d\n",temp->name,temp->score);
+    printf("%s %d %.2f %.2f %.2f %.2f\n",temp->name,temp->game_played,temp->feiled_goal_percentage,temp->three_point_percentage,temp->points_per_game,temp->steal_per_game);
     temp = temp->next;
   }
 }

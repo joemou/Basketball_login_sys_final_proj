@@ -7,6 +7,7 @@
         "cjson.h": "c",
         "edit_json.h": "c",
         "sign_in.h": "c",
-        "create_account.h": "c"
+        "create_account.h": "c",
+        "avl.h": "c"
     }
 }

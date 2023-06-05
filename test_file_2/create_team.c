@@ -18,7 +18,7 @@ int main() {
     cJSON *team_array = cJSON_GetObjectItem(json_object, "Basket_Ball_Teams");
     for(int i = 0; i < 2; i++){
         cJSON *add_team = cJSON_CreateObject();
-        cJSON_AddStringToObject(add_team, "Name", team_name[i]);
+        cJSON_AddStringToObject(add_team, "Team Name", team_name[i]);
         cJSON_AddItemToArray(team_array, add_team);
     }
 

@@ -4,6 +4,5 @@
 void split(node *first, node **a, node **b);
 
 /* merge the node */
-struct node *merge(node *a, node *b);
-
-void mergesort(node **head);
+struct node *merge(node *a, node *b,int action);
+void mergesort(node **head,int action);
