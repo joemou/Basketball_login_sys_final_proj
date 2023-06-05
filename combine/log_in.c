@@ -33,11 +33,9 @@ void on_button1_clicked(GtkWidget *widget, gpointer data) {
     const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
     if (find_user(&table, username, password)) {
         g_print("Login successful!\n");
-        // printf("Login successful!\n\n");
         Login_successful = 1;
     } else {
         g_print("Login failed. Invalid username or password.\n");
-        // printf("Login failed. Invalid username or password.\n\n");
     }
 
     // save users to file before exiting

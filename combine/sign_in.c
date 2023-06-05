@@ -47,13 +47,13 @@ void create_user(struct hash_table *table) {
         char username[50];
         char password[50];
         char password2[50];
-        printf("Sign Up\n");
-        printf("Enter username: ");
-        scanf("%s", username);
-        printf("Enter password: ");
-        scanf("%s", password);
-        printf("Enter password again: ");
-        scanf("%s", password2);
+        // printf("Sign Up\n");
+        // printf("Enter username: ");
+        // scanf("%s", username);
+        // printf("Enter password: ");
+        // scanf("%s", password);
+        // printf("Enter password again: ");
+        // scanf("%s", password2);
         if (strcmp(password, password2) == 0) {
             struct user *new_user = malloc(sizeof(struct user));
             strcpy(new_user->username, username);
@@ -70,7 +70,7 @@ void create_user(struct hash_table *table) {
 void save_users(struct hash_table *table, char *filename) {
     FILE *fp = fopen(filename, "wb");
     if (fp == NULL) {
-        printf("Error opening file.\n");
+        g_print("Error opening file.\n");
         return;
     }
 

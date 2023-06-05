@@ -43,6 +43,8 @@ void create_account(GtkButton *button, gpointer user_data) {
         g_free(error_message);
         // printf("The password entered twice is different\n\n");
     }
+
+    save_users(&table, "users.dat");
 }
 
 void cancel_clicked(GtkWidget *button, gpointer data)
