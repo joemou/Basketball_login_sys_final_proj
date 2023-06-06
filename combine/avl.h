@@ -5,7 +5,7 @@
 //for avl tree and search
 
 /* Create node for AVL and linked list (insert node at head) */
-void create(node **head, char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game); 
+void create(node **head, const char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game); 
 /* for inorder traversal, print order by alphabet */
 void printInorder(struct node *node);
 

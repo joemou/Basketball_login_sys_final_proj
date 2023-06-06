@@ -9,15 +9,17 @@
 #define isContent1Visible TRUE
 #define debug g_print("debug %d\n", __LINE__)
 
-// GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
 GtkTreeSelection *selection;
-char *authed_team;
+char *find_team = "Los Angeles Lakers";
+cJSON *teams_data; // complete data base
+cJSON *authed_team; // data base of particular team
 
 node *head = NULL;
 node *root = NULL;
 
-void input_data_from_AVL() {
+void input_data_from_AVL()
+{
     node *temp = head;
 
     while(temp!=NULL){
@@ -42,30 +44,29 @@ void input_data_from_AVL() {
     }
 }
 
-void insert_json_to_AVL(char *teamName) {
-
-    int time,game_played;
+void insert_json_to_AVL(char *teamName)
+{
+    int time, game_played;
     float feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game;
 
     char *name;
 
     char *data = read_json_to_str("data.json");
-    cJSON *teams = cJSON_GetObjectItem(cJSON_Parse(data), "Basket_Ball_Teams");
-    int teamSize = cJSON_GetArraySize(teams);
+    teams_data = cJSON_Parse(data);
+    cJSON *Basket_Ball_Teams = cJSON_GetObjectItem(teams_data, "Basket_Ball_Teams");
+    int teamSize = cJSON_GetArraySize(Basket_Ball_Teams);
     // find team
-    cJSON *team1;
     for(int i = 0; i < teamSize; i++){
-        cJSON *team = cJSON_GetArrayItem(teams, i);
+        cJSON *team = cJSON_GetArrayItem(Basket_Ball_Teams, i);
         char *getName = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
         if(strcmp(getName, teamName) == 0){
-            team1 = cJSON_GetObjectItem(team, "Players");
+            authed_team = cJSON_GetObjectItem(team, "Players");
             break;
         }
     }
-    // cJSON *team1 = cJSON_GetObjectItem(cJSON_GetArrayItem(teams, 0), "Players");
-    int size = cJSON_GetArraySize(team1);
+    int size = cJSON_GetArraySize(authed_team);
     for(int i = 0; i < size; ++i){
-        cJSON *tmp = cJSON_GetArrayItem(team1, i);
+        cJSON *tmp = cJSON_GetArrayItem(authed_team, i);
         name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
         game_played = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
         feiled_goal_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "FG"));
@@ -77,9 +78,34 @@ void insert_json_to_AVL(char *teamName) {
     }
 }
 
-void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
+void insert_data_to_data_base(const gchar *name, gint gp, gdouble fpg, gdouble ppg, gdouble spg, gdouble tpp)
+{
+    // add to AVL
+    create(&head, name, gp, fpg, tpp, ppg, spg);
+    root = insert(root,head);
+    // add to JSON
+    cJSON *player = cJSON_CreateObject();
+    cJSON_AddStringToObject(player, "Name", name);
+    cJSON_AddNumberToObject(player, "GP", gp);
+    cJSON_AddNumberToObject(player, "3P", tpp);
+    cJSON_AddNumberToObject(player, "PPG", ppg);
+    cJSON_AddNumberToObject(player, "FG", fpg);
+    cJSON_AddNumberToObject(player, "SPG", spg);
     
-     gtk_tree_selection_unselect_all(selection);    
+    cJSON_AddItemToArray(authed_team, player);
+    FILE *file = fopen("data.json", "w");
+    fputs(cJSON_Print(teams_data), file);
+    fclose(file);
+}
+
+void remove_data_from_data_base()
+{
+    
+}
+
+void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection)
+{    
+    gtk_tree_selection_unselect_all(selection);    
 }
 
 void on_ok_clicked(GtkWidget *button, gpointer data)
@@ -106,6 +132,7 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     {
         gtk_list_store_append(store, &iter); 
         gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
     }
 
     gtk_widget_destroy(add_win);
@@ -300,13 +327,14 @@ void init_list(GtkWidget *list)
     
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 
-    insert_json_to_AVL("Los Angeles Lakers");
+    insert_json_to_AVL(find_team);
     input_data_from_AVL();
 
     g_object_unref(store);    
 }
 
-void on_search_activate(GtkEntry *entry, gpointer data) {
+void on_search_activate(GtkEntry *entry, gpointer data)
+{
     const gchar *searchText = gtk_entry_get_text(entry);
     GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));
     GtkTreeIter iter;
@@ -343,10 +371,11 @@ void on_search_activate(GtkEntry *entry, gpointer data) {
     g_free(searchLower);
 }
 
-void create_after_window(const gchar *username) {
+void create_after_window(const gchar *username)
+{
     GtkWidget *sw, *remove, *add, *edit, *io, *print_all , *vbox, *hbox, *searchEntry;
     // uncomment when fixed
-    // authed_team = username;
+    // find_team = username;
    
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 

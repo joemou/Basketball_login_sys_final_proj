@@ -1,7 +1,7 @@
 #include "basic_func.h"
 #include "avl.h"
 
-void create(node **head, char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
+void create(node **head, const char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
   node *temp = (node *)malloc(sizeof(node));
   
   strcpy(temp->name, name);
@@ -26,7 +26,6 @@ void create(node **head, char *name, int game_played,float feiled_goal_percentag
 }
 
 /*for AVL tree https://www.youtube.com/watch?v=jDM6_TnYIqE*/
-//detect height
 
 void printInorder(struct node* node) {
   if (node == NULL){
@@ -130,7 +129,7 @@ struct node *min_name(struct node *node) {
   return current;
 }
 
-struct node *delete(struct node **head,struct node *point,struct node *root, char *name){
+struct node *delete(struct node **head,struct node *point,struct node *root, char *name) {
   // Find the node and delete it
   if (root == NULL)
     return root;
@@ -239,11 +238,11 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
   return root;
 }
 
-void print_player(node *node){
+void print_player(node *node) {
   printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
-void AVL_STRING_SEARCH(node *root,char *name){
+void AVL_STRING_SEARCH(node *root,char *name) {
 
   if(root==NULL){
     printf("not found");
@@ -264,7 +263,7 @@ void AVL_STRING_SEARCH(node *root,char *name){
   }
 }
 
-void print_linklist(node *head){
+void print_linklist(node *head) {
   node *temp = head;
   printf("\n");
   while(temp!=NULL){

@@ -8,6 +8,7 @@
         "edit_json.h": "c",
         "sign_in.h": "c",
         "create_account.h": "c",
-        "avl.h": "c"
+        "avl.h": "c",
+        "typeinfo": "c"
     }
 }
