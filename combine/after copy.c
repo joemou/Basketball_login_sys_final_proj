@@ -8,39 +8,12 @@
 
 #define isContent1Visible TRUE
 
-// GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
-GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkTreeSelection *selection;
 char *teamName;
 
 node *head = NULL;
 node *root = NULL;
-
-void input_data_from_AVL() {
-    node *temp = head;
-    printf("\n");
-    while(temp!=NULL){
-        GtkListStore *store;
-        GtkTreeIter iter;
-        GtkTreeModel *model;
-
-        const gchar *name = temp->name;
-        gint gp = temp->game_played;
-        gdouble fgp = temp->feiled_goal_percentage;
-        gdouble ppg = temp->points_per_game;
-        gdouble spg = temp->steal_per_game;
-        gdouble tpp = temp->three_point_percentage;
-
-        store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-        model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
-
-        temp = temp->next;
-
-        gtk_list_store_append(store, &iter); 
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
-    
-    }
-}
 
 void insert_json_to_AVL() {
     int time,game_played;
@@ -78,22 +51,25 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
 
     const gchar *name = gtk_entry_get_text(GTK_ENTRY(entry_name));
     gint gp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_gp)));   
-    gdouble fpg = atof(gtk_entry_get_text(GTK_ENTRY(entry_fpg)));
+    gdouble mpg = atof(gtk_entry_get_text(GTK_ENTRY(entry_mpg)));
     gdouble ppg = atof(gtk_entry_get_text(GTK_ENTRY(entry_ppg)));
-    gdouble spg = atoi(gtk_entry_get_text(GTK_ENTRY(entry_spg)));
-    gdouble tpp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_tpp)));
+    gint tp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_tp)));
+    gint fgm = atoi(gtk_entry_get_text(GTK_ENTRY(entry_fgm)));
+    gdouble fg = atof(gtk_entry_get_text(GTK_ENTRY(entry_fg)));
+    gint pm = atoi(gtk_entry_get_text(GTK_ENTRY(entry_pm)));
+    gint to = atoi(gtk_entry_get_text(GTK_ENTRY(entry_to)));
+    gint pf = atoi(gtk_entry_get_text(GTK_ENTRY(entry_pf)));
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
-    }
+        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);    }
     else
     {
         gtk_list_store_append(store, &iter); 
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_MPG, mpg, LIST_PPG, ppg, LIST_TP, tp, LIST_FGM, fgm, LIST_FG, fg, LIST_PM, pm, LIST_TO, to, LIST_PF, pf, -1);
     }
 
     gtk_widget_destroy(add_win);
@@ -129,20 +105,36 @@ GtkWidget *create_addwin()
     gtk_grid_attach(GTK_GRID(grid), entry_gp, 1, 1, 1, 1);
     label = gtk_label_new("MPG");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
-    entry_fpg = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_fpg, 1, 2, 1, 1);
+    entry_mpg = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_mpg, 1, 2, 1, 1);
     label = gtk_label_new("PPG");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 3, 1, 1);
     entry_ppg = gtk_entry_new();
     gtk_grid_attach(GTK_GRID(grid), entry_ppg, 1, 3, 1, 1);
     label = gtk_label_new("TP");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 4, 1, 1);
-    entry_spg = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_spg, 1, 4, 1, 1);
+    entry_tp = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_tp, 1, 4, 1, 1);
     label = gtk_label_new("FGM");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 5, 1, 1);
-    entry_tpp = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_tpp, 1, 5, 1, 1);
+    entry_fgm = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_fgm, 1, 5, 1, 1);
+    label = gtk_label_new("FG%");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 6, 1, 1);
+    entry_fg = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_fg, 1, 6, 1, 1);
+    label = gtk_label_new("3PM");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 7, 1, 1);
+    entry_pm = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_pm, 1, 7, 1, 1);
+    label = gtk_label_new("TO");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 8, 1, 1);
+    entry_to = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_to, 1, 8, 1, 1);
+    label = gtk_label_new("PF");
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 9, 1, 1);
+    entry_pf = gtk_entry_new();
+    gtk_grid_attach(GTK_GRID(grid), entry_pf, 1, 9, 1, 1);
 
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 
@@ -207,32 +199,45 @@ void edit_item(GtkWidget *widget, gpointer selection)
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {   
         gchar *name;
-        gint gp;
-        gdouble fpg, ppg, spg, tpp;
+        gint gp, tp, fgm, pm, to, pf;
+        gdouble mpg, ppg, fg;
         
-        gtk_tree_model_get(model, &iter, LIST_NAME, &name, LIST_GP, &gp, LIST_FPG, &fpg, LIST_PPG, &ppg, LIST_SPG, &spg, LIST_TPP, &tpp, -1);
+        gtk_tree_model_get(model, &iter, LIST_NAME, &name, LIST_GP, &gp, LIST_MPG, &mpg, LIST_PPG, &ppg, LIST_TP, &tp, LIST_FGM, &fgm, LIST_FG, &fg, LIST_PM, &pm, LIST_TO, &to, LIST_PF, &pf, -1);
     
         gchar *gp_str = g_strdup_printf("%d", gp);
-        gchar *fpg_str = g_strdup_printf("%f", fpg);
+        gchar *mpg_str = g_strdup_printf("%f", mpg);
         gchar *ppg_str = g_strdup_printf("%f", ppg);
-        gchar *spg_str = g_strdup_printf("%f", spg);
-        gchar *tpp_str = g_strdup_printf("%f", tpp);
+        gchar *tp_str = g_strdup_printf("%d", tp);
+        gchar *fgm_str = g_strdup_printf("%d", fgm);
+        gchar *fg_str = g_strdup_printf("%f", fg);
+        gchar *pm_str = g_strdup_printf("%d", pm);
+        gchar *to_str = g_strdup_printf("%d", to);
+        gchar *pf_str = g_strdup_printf("%d",pf);	
         
         add_win = create_addwin();
         
-        gtk_entry_set_text(GTK_ENTRY(entry_name), name);
+        gtk_entry_set_text(GTK_ENTRY(entry_name), name);      
         gtk_entry_set_text(GTK_ENTRY(entry_gp), gp_str);
-        gtk_entry_set_text(GTK_ENTRY(entry_fpg), fpg_str);
-        gtk_entry_set_text(GTK_ENTRY(entry_ppg), ppg_str);
-        gtk_entry_set_text(GTK_ENTRY(entry_spg), spg_str);
-        gtk_entry_set_text(GTK_ENTRY(entry_tpp), tpp_str);
+        gtk_entry_set_text(GTK_ENTRY(entry_mpg), mpg_str);       
+        gtk_entry_set_text(GTK_ENTRY(entry_ppg), ppg_str);               
+        gtk_entry_set_text(GTK_ENTRY(entry_tp), tp_str);            
+        gtk_entry_set_text(GTK_ENTRY(entry_fgm), fgm_str);                
+        gtk_entry_set_text(GTK_ENTRY(entry_fg), fg_str);              
+        gtk_entry_set_text(GTK_ENTRY(entry_pm), pm_str);       
+        gtk_entry_set_text(GTK_ENTRY(entry_to), to_str);
+        gtk_entry_set_text(GTK_ENTRY(entry_pf), pf_str);
     
 	    g_free(name);
         g_free(gp_str);
-        g_free(fpg_str);
+        g_free(mpg_str);
         g_free(ppg_str);
-        g_free(spg_str);
-        g_free(tpp_str);        
+        g_free(tp_str);
+        g_free(fgm_str);
+        g_free(fg_str);
+        g_free(pm_str);
+        g_free(to_str);
+        g_free(pf_str);        
+        
     }
 }
 
@@ -261,7 +266,7 @@ void init_list(GtkWidget *list)
     g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
     
     renderer = gtk_cell_renderer_text_new();    
-    column = gtk_tree_view_column_new_with_attributes("FPG", renderer, "text", LIST_FPG, NULL);
+    column = gtk_tree_view_column_new_with_attributes("MPG", renderer, "text", LIST_MPG, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
     g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
@@ -273,18 +278,42 @@ void init_list(GtkWidget *list)
     g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
     
     renderer = gtk_cell_renderer_text_new();    
-    column = gtk_tree_view_column_new_with_attributes("SPG", renderer, "text", LIST_SPG, NULL);
+    column = gtk_tree_view_column_new_with_attributes("TP", renderer, "text", LIST_TP, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
     g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
     
     renderer = gtk_cell_renderer_text_new();   
-    column = gtk_tree_view_column_new_with_attributes("TPP", renderer, "text", LIST_TPP, NULL);
+    column = gtk_tree_view_column_new_with_attributes("FGM", renderer, "text", LIST_FGM, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
     g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
     
-    store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+    renderer = gtk_cell_renderer_text_new();    
+    column = gtk_tree_view_column_new_with_attributes("FG%", renderer, "text", LIST_FG, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+    gtk_tree_view_column_set_clickable(column, TRUE);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    
+    renderer = gtk_cell_renderer_text_new();    
+    column = gtk_tree_view_column_new_with_attributes("3PM", renderer, "text", LIST_PM, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+    gtk_tree_view_column_set_clickable(column, TRUE);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    
+    renderer = gtk_cell_renderer_text_new();    
+    column = gtk_tree_view_column_new_with_attributes("TO", renderer, "text", LIST_TO, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+    gtk_tree_view_column_set_clickable(column, TRUE);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    
+    renderer = gtk_cell_renderer_text_new();    
+    column = gtk_tree_view_column_new_with_attributes("PF", renderer, "text", LIST_PF, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);   
+    gtk_tree_view_column_set_clickable(column, TRUE);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    
+    store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_INT, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
     
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 

@@ -4,8 +4,8 @@
 #include <gtk/gtk.h>
 
 enum {
-    // LIST_NAME, LIST_GP, LIST_MPG, LIST_PPG, LIST_TP, LIST_FGM, LIST_FG, LIST_PM, LIST_TO, LIST_PF, N_COLUMNS
-    LIST_NAME, LIST_GP, LIST_FPG, LIST_PPG, LIST_SPG, LIST_TPP, N_COLUMNS
+    LIST_NAME, LIST_GP, LIST_MPG, LIST_PPG, LIST_TP, LIST_FGM, LIST_FG, LIST_PM, LIST_TO, LIST_PF, N_COLUMNS
+    LIST_NAME, LIST_GP, LIST_MPG, LIST_PPG, LIST_TP, LIST_FGM, LIST_FG, LIST_PM, LIST_TO, LIST_PF, N_COLUMNS
 };
 
 // extern GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
