@@ -1,10 +1,41 @@
 #include <gtk/gtk.h>
 #include "after.h"
+#include "avl.h"
+#include "merge_sort.h"
+#include "basic_func.h"
+#include "cJSON.h"
 
 #define isContent1Visible TRUE
 
 GtkWidget *list, *add_win, *entry_name, *entry_gp, *entry_mpg, *entry_ppg, *entry_tp, *entry_fgm, *entry_fg, *entry_pm, *entry_to, *entry_pf, *window;
 GtkTreeSelection *selection;
+char *teamName;
+
+node *head = NULL;
+node *root = NULL;
+
+void insert_json_to_AVL() {
+    int time,game_played;
+    float feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game;
+
+    char *name;
+
+    char *data = read_json_to_str("data.json");
+    cJSON *team = cJSON_Parse(data);
+    cJSON *team1 = cJSON_GetObjectItem(cJSON_GetArrayItem(cJSON_GetObjectItem(team, "Basket_Ball_Teams"), 0), "Players");
+    int size = cJSON_GetArraySize(team1);
+    for(int i = 0; i < size; ++i){
+        cJSON *tmp = cJSON_GetArrayItem(team1, i);
+        name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
+        game_played = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
+        feiled_goal_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "FG"));
+        three_point_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
+        points_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
+        steal_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
+        create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);//create link list
+        root = insert(root,head);//create avl tree
+    }
+}
 
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     
@@ -325,8 +356,17 @@ void on_search_activate(GtkEntry *entry, gpointer data) {
     g_free(searchLower);
 }
 
-void create_after_window() {
+void create_after_window(const gchar *username) {
     GtkWidget *sw, *remove, *add, *edit, *io, *print_all , *vbox, *hbox, *searchEntry;
+
+    // teamName = (char*) malloc(sizeof(char) + 100);
+    // int i = 0;
+    // while(*(username + i) != '\0') {
+    //     *(teamName + i) = *(username + i);
+    //     i++;
+    // }
+    // g_print("%s", username);
+    // strcpy(teamName, username);
    
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
@@ -398,10 +438,3 @@ void create_after_window() {
     gtk_main();
 
 }
-
-// void on_button1_clicked(GtkWidget *widget, gpointer data) {
-//     GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-//     gtk_widget_destroy(current_window);
-
-//     create_after_window();
-// }

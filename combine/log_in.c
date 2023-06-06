@@ -45,7 +45,7 @@ void on_button1_clicked(GtkWidget *widget, gpointer data) {
         GtkWidget *current_window = gtk_widget_get_toplevel(widget);
         gtk_widget_destroy(current_window);
 
-        create_after_window();
+        create_after_window(username);
     }
 }
 

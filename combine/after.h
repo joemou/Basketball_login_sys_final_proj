@@ -30,7 +30,7 @@ void init_list(GtkWidget *list);
 
 void on_search_activate(GtkEntry *entry, gpointer data);
 
-void create_after_window();
+void create_after_window(const gchar *username);
 
 // void on_button1_clicked(GtkWidget *widget, gpointer data);
 

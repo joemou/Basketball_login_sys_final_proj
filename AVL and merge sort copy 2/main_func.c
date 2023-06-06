@@ -33,7 +33,9 @@ int main(){
   char *data = read_json_to_str("data.json");
   cJSON *team = cJSON_Parse(data);
   cJSON *team1 = cJSON_GetObjectItem(cJSON_GetArrayItem(cJSON_GetObjectItem(team, "Basket_Ball_Teams"), 0), "Players");
-  for(int i = 0; i < 15; ++i){
+  int size = cJSON_GetArraySize(team1);
+  printf("%d", size);
+  for(int i = 0; i < size; ++i){
     cJSON *tmp = cJSON_GetArrayItem(team1, i);
     name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
     game_played = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
