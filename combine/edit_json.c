@@ -22,7 +22,7 @@ void json_create_new_team(char *new_team) {
     cJSON *team = cJSON_Parse(data);
     cJSON *team_array = cJSON_GetObjectItem(team, "Basket_Ball_Teams");
     cJSON *tmp = cJSON_CreateObject();
-    cJSON_AddStringToObject(tmp, "Name", new_team);
+    cJSON_AddStringToObject(tmp, "Team Name", new_team);
     cJSON_AddArrayToObject(tmp, "Players");
     cJSON_AddItemToArray(team_array, tmp);
     

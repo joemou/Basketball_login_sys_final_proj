@@ -20,5 +20,4 @@ typedef struct node{
   struct node *left;
 } node;
 
-void chen_jun_han();
 #endif
