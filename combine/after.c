@@ -4,6 +4,7 @@
 #include "merge_sort.h"
 #include "basic_func.h"
 #include "cJSON.h"
+#include "edit_json.h"
 
 #define isContent1Visible TRUE
 

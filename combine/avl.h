@@ -1,3 +1,6 @@
+#ifndef avl_h
+#define avl_h
+#include "basic_func.h"
 
 //for avl tree and search
 
@@ -33,3 +36,4 @@ void AVL_STRING_SEARCH(node *root, char *name);
 
 /* for print */
 void print_linklist(node *head);
+#endif

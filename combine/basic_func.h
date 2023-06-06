@@ -1,3 +1,5 @@
+#ifndef basic_func_h
+#define basic_func_h
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,3 +19,6 @@ typedef struct node{
   struct node *right;//for avl tree pointer
   struct node *left;
 } node;
+
+void chen_jun_han();
+#endif

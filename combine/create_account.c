@@ -15,7 +15,7 @@ gboolean check_passwords_match(){
     return 0;
 };
 
-void create_account(GtkButton *button, gpointer user_data) {
+void create_account(GtkButton *button, gpointer data) {
 
     struct hash_table table;
     table.size = HASH_SIZE;
@@ -45,6 +45,7 @@ void create_account(GtkButton *button, gpointer user_data) {
     }
 
     save_users(&table, "users.dat");
+    gtk_widget_destroy(data);
 }
 
 void cancel_clicked(GtkWidget *button, gpointer data)
@@ -112,7 +113,7 @@ void create_create_account_window(){
 
     GtkWidget *button_sign = gtk_button_new_with_label("Sign Up");
     gtk_box_pack_start(GTK_BOX(vbox), button_sign, FALSE, FALSE, 0);
-    g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), NULL);
+    g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), window);
 
     gtk_widget_show_all(window);
 

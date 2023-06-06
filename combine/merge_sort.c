@@ -1,4 +1,3 @@
-#include "basic_func.h"
 #include "merge_sort.h"
 
 /*for merge sort*/
