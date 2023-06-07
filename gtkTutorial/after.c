@@ -77,16 +77,10 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     GtkTreeModel *model;
 
     const gchar *name = gtk_entry_get_text(GTK_ENTRY(entry_name));
-    if(data == "append")
-    {
-        if(on_search_activate(GTK_ENTRY(entry_name), list) == 1){
-            // if數據已存在
-            GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Data exists");
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
-    	    return;
-        }
-    }
+    
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
     //轉換型態
     const gchar *team = gtk_entry_get_text(GTK_ENTRY(entry_team));
     gint gp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_gp)));   
@@ -95,9 +89,30 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     gfloat ppg = atof(gtk_entry_get_text(GTK_ENTRY(entry_ppg)));   
     gfloat spg = atoi(gtk_entry_get_text(GTK_ENTRY(entry_spg)));   
     
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+    gboolean exists = FALSE;
+    gboolean valid = gtk_tree_model_get_iter_first(model, &iter);
 
+    while (valid) {
+        gchar *existingName;
+        gtk_tree_model_get(model, &iter, LIST_NAME, &existingName, -1);
+
+        if (g_strcmp0(existingName, name) == 0) {
+            exists = TRUE;
+            g_free(existingName);
+            break;
+        }
+
+        g_free(existingName);
+
+        valid = gtk_tree_model_iter_next(model, &iter);
+    }
+
+    if (exists) {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Data exists");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
     
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
