@@ -129,7 +129,7 @@ struct node *min_name(struct node *node) {
   return current;
 }
 
-struct node *delete(struct node **head,struct node *point,struct node *root, char *name) {
+struct node *delete(struct node **head,struct node *point,struct node *root, const char *name) {
   // Find the node and delete it
   if (root == NULL)
     return root;

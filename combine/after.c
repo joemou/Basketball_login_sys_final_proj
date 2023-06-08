@@ -18,7 +18,7 @@ cJSON *authed_team; // data base of particular team
 node *head = NULL;
 node *root = NULL;
 
-void input_data_from_AVL()
+void insert_AVL_to_gtk()
 {
     node *temp = head;
 
@@ -98,9 +98,23 @@ void insert_data_to_data_base(const gchar *name, gint gp, gdouble fpg, gdouble p
     fclose(file);
 }
 
-void remove_data_from_data_base()
+void remove_data_from_data_base(const char *search_name)
 {
-    
+    // delete from avl
+    delete(&head, head, root, search_name);
+    // delete from json
+    int size = cJSON_GetArraySize(authed_team);
+    for(int i = 0; i < size; ++i){
+        cJSON *tmp = cJSON_GetArrayItem(authed_team, i);
+        char *player = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
+        if(strcmp(player, search_name) == 0){
+            cJSON_DeleteItemFromArray(authed_team, i);
+            break;
+        }
+    }
+    FILE *file = fopen("data.json", "w");
+    fputs(cJSON_Print(teams_data), file);
+    fclose(file);
 }
 
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection)
@@ -127,6 +141,8 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
         gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        remove_data_from_data_base(name);
+        insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
     }
     else
     {
@@ -328,7 +344,7 @@ void init_list(GtkWidget *list)
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 
     insert_json_to_AVL(find_team);
-    input_data_from_AVL();
+    insert_AVL_to_gtk();
 
     g_object_unref(store);    
 }

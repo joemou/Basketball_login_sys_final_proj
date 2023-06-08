@@ -27,7 +27,7 @@ struct node *insert(struct node *root, struct node *node);
 struct node *min_name(struct node *node);
 
 /* Delete the node on avl tree and link_list */
-struct node *delete(struct node **head, struct node *point, struct node *root, char *name);
+struct node *delete(struct node **head, struct node *point, struct node *root, const char *name);
 
 /* Printing linklist */
 void print_player(node *node);
