@@ -140,12 +140,14 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
 
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
     {
+        // case of edit
         gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         remove_data_from_data_base(name);
         insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
     }
     else
     {
+        // case of add
         gtk_list_store_append(store, &iter); 
         gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);

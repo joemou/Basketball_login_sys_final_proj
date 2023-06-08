@@ -243,7 +243,7 @@ void print_player(node *node){
   printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
-void AVL_STRING_SEARCH(node *root,char *name){
+void AVL_STRING_SEARCH(node *root, char *name){
 
   if(root==NULL){
     printf("not found");
