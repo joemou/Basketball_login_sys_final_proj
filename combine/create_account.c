@@ -127,5 +127,3 @@ void on_button2_clicked(GtkWidget *widget, gpointer data)
 {
     create_create_account_window();
 };
-
-
