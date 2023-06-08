@@ -25,7 +25,7 @@ cJSON.o: cJSON.c cJSON.h
 	${CC} -c cJSON.c
 
 avl.o: avl.c avl.h basic_func.h
-	${CC} -c avl.c
+	${CC} ${CFLAGS} -c avl.c ${LIBS}
 
 merge_sort.o: merge_sort.c merge_sort.h basic_func.h
 	${CC} -c merge_sort.c

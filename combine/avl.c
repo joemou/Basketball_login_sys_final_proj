@@ -1,3 +1,4 @@
+#include <gtk/gtk.h>
 #include "basic_func.h"
 #include "avl.h"
 
@@ -27,14 +28,14 @@ void create(node **head, const char *name, int game_played,float feiled_goal_per
 
 /*for AVL tree https://www.youtube.com/watch?v=jDM6_TnYIqE*/
 
-void printInorder(struct node* node) {
-  if (node == NULL){
-    return;
-  }
-  printInorder(node->left);
-  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
-  printInorder(node->right);
-}
+// void printInorder(struct node* node) {
+//   if (node == NULL){
+//     return;
+//   }
+//   printInorder(node->left);
+//   printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
+//   printInorder(node->right);
+// }
 
 int height(struct node *node) {
   if (node == NULL)
@@ -91,7 +92,7 @@ struct node *insert(struct node *root, struct node *node) {
     root->right = insert(root->right, node);
   }
   else{
-    printf("name exist\n");
+    g_print("name exist\n");
     return node; // node with same name already exists
   }
   // Update height of this node
@@ -245,7 +246,7 @@ void print_player(node *node) {
 void AVL_STRING_SEARCH(node *root,char *name) {
 
   if(root==NULL){
-    printf("not found");
+    g_print("not found");
     return;
   }
 

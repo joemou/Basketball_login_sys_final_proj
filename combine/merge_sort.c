@@ -21,8 +21,6 @@ void split(node *first,node **a,node **b){
 
   *a = first;
   slow->next = NULL;
-
-    
 }
 
 struct node *merge(node *a,node *b,int action){
@@ -72,7 +70,8 @@ struct node *merge(node *a,node *b,int action){
 
   return result;
 }
-void mergesort (node **head,int action){
+
+void mergesort(node **head,int action){
   node *first = *head;
   node *a;
   node *b;
@@ -85,8 +84,6 @@ void mergesort (node **head,int action){
 
   mergesort(&a,action);
   mergesort(&b,action);
-
-  
 
   *head = merge(a,b,action);
 }

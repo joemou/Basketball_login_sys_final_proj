@@ -7,7 +7,7 @@
 /* Create node for AVL and linked list (insert node at head) */
 void create(node **head, const char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game); 
 /* for inorder traversal, print order by alphabet */
-void printInorder(struct node *node);
+// void printInorder(struct node *node);
 
 int height(struct node *node);
 int max(int a, int b);

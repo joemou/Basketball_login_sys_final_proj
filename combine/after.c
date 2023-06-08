@@ -17,25 +17,26 @@ cJSON *authed_team; // data base of particular team
 
 node *head = NULL;
 node *root = NULL;
+node *search_player;
 
 void insert_AVL_to_gtk()
 {
     node *temp = head;
 
-    while(temp!=NULL){
-        GtkListStore *store;
-        GtkTreeIter iter;
-        GtkTreeModel *model;
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
 
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+    
+    while(temp!=NULL){
         const gchar *name = temp->name;
         gint gp = temp->game_played;
         gdouble fgp = temp->feiled_goal_percentage;
         gdouble ppg = temp->points_per_game;
         gdouble spg = temp->steal_per_game;
         gdouble tpp = temp->three_point_percentage;
-
-        store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
-        model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
         temp = temp->next;
 
@@ -115,6 +116,58 @@ void remove_data_from_data_base(const char *search_name)
     FILE *file = fopen("data.json", "w");
     fputs(cJSON_Print(teams_data), file);
     fclose(file);
+}
+
+void search_from_AVL()
+{
+    
+}
+
+void delete_table_item()
+{
+    GtkListStore *store;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+    
+    while (gtk_tree_model_get_iter_first(model, &iter)) {
+        gtk_list_store_remove(store, &iter);
+        // Retrieve data from the model for the current item
+        // gchar *item;
+        // gtk_tree_model_get(model, &iter, 0, &item, -1);  // Assuming the item is in the first column
+        // g_print("Item: %s\n", item);
+        // g_free(item);
+    }
+}
+
+void printInorder(struct node* node)
+{
+    if (node == NULL){
+        return;
+    }
+
+    printInorder(node->left);
+
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
+    const gchar *name = node->name;
+    gint gp = node->game_played;
+    gdouble fgp = node->feiled_goal_percentage;
+    gdouble ppg = node->points_per_game;
+    gdouble spg = node->steal_per_game;
+    gdouble tpp = node->three_point_percentage;
+
+    gtk_list_store_append(store, &iter); 
+    gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+
+    printInorder(node->right);
 }
 
 void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection)
@@ -228,7 +281,6 @@ void append_item(GtkWidget *widget, gpointer data)
 
 void remove_item(GtkWidget *widget, gpointer selection)
 {
-
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -295,8 +347,15 @@ void edit_item(GtkWidget *widget, gpointer selection)
 
 void column_clicked(GtkTreeViewColumn *column, gpointer data)
 {
-    const gchar *title = gtk_tree_view_column_get_title(column);
-    g_print("%s\n", title);
+    if(GPOINTER_TO_INT(data) == 0){
+        delete_table_item();
+        printInorder(root);
+    }
+    else{
+        mergesort(&head, GPOINTER_TO_INT(data));
+        delete_table_item();
+        insert_AVL_to_gtk();
+    }
 }
 
 void init_list(GtkWidget *list)
@@ -304,42 +363,43 @@ void init_list(GtkWidget *list)
     GtkCellRenderer *renderer;  
     GtkTreeViewColumn *column;
     GtkListStore *store;
+    gint sort_by[] = {0, 1, 2, 3, 4, 5};
     
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes("Name", renderer, "text", LIST_NAME, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[0]));
     
     renderer = gtk_cell_renderer_text_new(); 
     column = gtk_tree_view_column_new_with_attributes("GP", renderer, "text", LIST_GP, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[1]));
     
     renderer = gtk_cell_renderer_text_new();    
     column = gtk_tree_view_column_new_with_attributes("FPG", renderer, "text", LIST_FPG, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[2]));
     
     renderer = gtk_cell_renderer_text_new();    
     column = gtk_tree_view_column_new_with_attributes("PPG", renderer, "text", LIST_PPG, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[4]));
     
     renderer = gtk_cell_renderer_text_new();    
     column = gtk_tree_view_column_new_with_attributes("SPG", renderer, "text", LIST_SPG, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[5]));
     
     renderer = gtk_cell_renderer_text_new();   
     column = gtk_tree_view_column_new_with_attributes("TPP", renderer, "text", LIST_TPP, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
     gtk_tree_view_column_set_clickable(column, TRUE);
-    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), NULL);
+    g_signal_connect(column, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[3]));
     
     store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
     
@@ -456,7 +516,8 @@ void create_after_window(const gchar *username)
     g_signal_connect(G_OBJECT(searchEntry), "activate", G_CALLBACK(on_search_activate), list);
     g_signal_connect(G_OBJECT(add), "clicked", G_CALLBACK(append_item), NULL);
     g_signal_connect(G_OBJECT(remove), "clicked", G_CALLBACK(remove_item), selection);
-    g_signal_connect(G_OBJECT(edit), "clicked", G_CALLBACK(edit_item), selection);      
+    g_signal_connect(G_OBJECT(edit), "clicked", G_CALLBACK(edit_item), selection);
+    // g_signal_connect(G_OBJECT(io), "clicked", G_CALLBACK(delete_table_item), NULL);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(list, "row-activated", G_CALLBACK(double_click_row), selection);
 
