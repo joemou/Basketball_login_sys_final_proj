@@ -7,16 +7,18 @@ GtkWidget *username_entry;
 GtkWidget *password_entry;
 GtkWidget *confirm_entry;
 
-gboolean check_username_exists(){
+gboolean check_username_exists()
+{
     return 0;
 };
 
-gboolean check_passwords_match(){
+gboolean check_passwords_match()
+{
     return 0;
 };
 
-void create_account(GtkButton *button, gpointer data) {
-
+void create_account(GtkButton *button, gpointer data)
+{
     struct hash_table table;
     table.size = HASH_SIZE;
     table.users = malloc(sizeof(struct user *) * table.size);
@@ -53,7 +55,8 @@ void cancel_clicked(GtkWidget *button, gpointer data)
     gtk_widget_destroy(data);
 }
 
-void create_create_account_window(){
+void create_create_account_window()
+{
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "創建帳號");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
@@ -120,10 +123,8 @@ void create_create_account_window(){
     gtk_main();
 };
 
-void on_button2_clicked(GtkWidget *widget, gpointer data){
-    // GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-    // gtk_widget_destroy(current_window);
-
+void on_button2_clicked(GtkWidget *widget, gpointer data)
+{
     create_create_account_window();
 };
 
