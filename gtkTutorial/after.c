@@ -228,6 +228,8 @@ void remove_item(GtkWidget *widget, gpointer selection)
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
     win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size(GTK_WINDOW(win), 60, 60);
+    gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER); 
     gtk_window_set_title(GTK_WINDOW(win), "Delete");
 
     searchEntry = gtk_search_entry_new();
