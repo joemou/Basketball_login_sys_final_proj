@@ -2,6 +2,22 @@
 #include "after.h"
 #include "create_account.h"
 
+gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
+    GdkRGBA color;
+    gdk_rgba_parse(&color, "white");
+
+    int width = 300;
+    int height = 400;
+    int x = (gtk_widget_get_allocated_width(widget) - width) / 2;
+    int y = (gtk_widget_get_allocated_height(widget) - height) / 2;
+
+    cairo_set_source_rgba(cr, color.red, color.green, color.blue, color.alpha);
+    cairo_rectangle(cr, x, y, width, height);
+    cairo_fill(cr);
+
+    return FALSE;
+}
+
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
@@ -19,7 +35,7 @@ int main(int argc, char *argv[]) {
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-    
+
     fixed = gtk_fixed_new();
 
     entry1 = gtk_entry_new();
@@ -55,19 +71,22 @@ int main(int argc, char *argv[]) {
     gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
     pango_attr_list_unref(attr_list);
 
-    gtk_fixed_put(GTK_FIXED(fixed), title, 225, 150);
-    gtk_fixed_put(GTK_FIXED(fixed), subtitle, 275, 200);
-    gtk_fixed_put(GTK_FIXED(fixed), entry1, 225, 250);
-    gtk_fixed_put(GTK_FIXED(fixed), entry2, 225, 300);
-    gtk_fixed_put(GTK_FIXED(fixed), button2, 225, 350);
-    gtk_fixed_put(GTK_FIXED(fixed), button1, 225, 400);
+    gtk_fixed_put(GTK_FIXED(fixed), title, 210, 150);
+    gtk_fixed_put(GTK_FIXED(fixed), subtitle, 260, 200);
+    gtk_fixed_put(GTK_FIXED(fixed), entry1, 210, 250);
+    gtk_fixed_put(GTK_FIXED(fixed), entry2, 210, 300);
+    gtk_fixed_put(GTK_FIXED(fixed), button2, 210, 350);
+    gtk_fixed_put(GTK_FIXED(fixed), button1, 210, 400);
 
     gtk_widget_show(title);
     gtk_widget_show(subtitle);
 
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
-    /*g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);*/
+    g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    gtk_widget_set_app_paintable(window, TRUE);
+    g_signal_connect(window, "draw", G_CALLBACK(draw_rectangle), NULL);
 
     gtk_container_add(GTK_CONTAINER(window), fixed);
     gtk_widget_show_all(window);
