@@ -1,20 +1,8 @@
 #include <gtk/gtk.h>
 #include "after.h"
 #include "create_account.h"
-#include "sign_in.h"
 
-static GtkWidget *window;
-GtkWidget *fixed;
-GtkWidget *entry1;
-GtkWidget *entry2;
-GtkWidget *button1;
-GtkWidget *button2;
-GtkWidget *title;
-GtkWidget *subtitle;
-PangoAttrList *attr_list;
-PangoAttribute *attr;
-
-static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
+gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     GdkRGBA color;
     gdk_rgba_parse(&color, "white");
 
@@ -30,44 +18,19 @@ static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     return FALSE;
 }
 
-void on_button1_clicked(GtkWidget *widget, gpointer data) {
-
-    // first do login check then click button1
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
-
-    // load users from file
-    load_users(&table, "users.dat");
-
-    // create some sample users
-    int choice, Login_successful = 0;
-        
-    // authenticate user
-    const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
-    const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
-    if (find_user(&table, username, password)) {
-        g_print("Login successful!\n");
-        Login_successful = 1;
-    } else {
-        g_print("Login failed. Invalid username or password.\n");
-    }
-
-    // save users to file before exiting
-    save_users(&table, "users.dat");
-
-    if(Login_successful) {
-        GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-        gtk_widget_destroy(current_window);
-
-        create_after_window(username);
-    }
-}
-
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
+    GtkWidget *window;
+    GtkWidget *fixed;
+    GtkWidget *entry1;
+    GtkWidget *entry2;
+    GtkWidget *button1;
+    GtkWidget *button2;
+    GtkWidget *title;
+    GtkWidget *subtitle;
+    PangoAttrList *attr_list;
+    PangoAttribute *attr;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
@@ -119,7 +82,6 @@ int main(int argc, char *argv[]) {
     gtk_widget_show(subtitle);
 
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
-    // on_button1_clicked(button1, NULL);
     g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 

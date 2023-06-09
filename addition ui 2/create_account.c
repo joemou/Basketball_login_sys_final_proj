@@ -1,14 +1,9 @@
 #include <gtk/gtk.h>
-#include "create_account.h"
-#include "sign_in.h"
-
-GtkWidget *username_entry;
-GtkWidget *password_entry;
-GtkWidget *confirm_entry;
+#include "after.h"
 
 GtkWidget *error_label;
 
-static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
+gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     GdkRGBA color;
     gdk_rgba_parse(&color, "white");
 
@@ -34,37 +29,19 @@ gboolean check_passwords_match()
     return 0;
 };
 
-void create_account(GtkButton *button, gpointer data)
+void create_account(GtkButton *button, gpointer user_data)
 {
-    struct hash_table table;
-    table.size = HASH_SIZE;
-    table.users = malloc(sizeof(struct user *) * table.size);
-    memset(table.users, 0, sizeof(struct user *) * table.size);
+    gboolean passwords_match = check_passwords_match();
+    gboolean username_exists = check_username_exists();
 
-    // load users from file
-    load_users(&table, "users.dat");
-
-    const gchar *username = gtk_entry_get_text(GTK_ENTRY(username_entry));
-    const gchar *password = gtk_entry_get_text(GTK_ENTRY(password_entry));
-    const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
-
-    if (strcmp(password, password2) == 0) {
-        struct user *new_user = malloc(sizeof(struct user));
-        strcpy(new_user->username, username);
-        strcpy(new_user->password, password);
-        insert_new_user(&table, new_user);
-        g_print("Sign Up successful!\n");
-    } else {
+    if (!passwords_match || username_exists) {
         gchar *error_message = g_strdup("-error-");
 
         gtk_label_set_text(GTK_LABEL(error_label), error_message);
 
         g_free(error_message);
-        // printf("The password entered twice is different\n\n");
+        return;
     }
-
-    save_users(&table, "users.dat");
-    gtk_widget_destroy(data);
 }
 
 void cancel_clicked(GtkWidget *widget, gpointer data)
