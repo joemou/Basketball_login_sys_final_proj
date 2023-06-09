@@ -388,7 +388,8 @@ void create_after_window()
     gtk_window_set_title(GTK_WINDOW(window), "Player Data");
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
     gtk_widget_set_size_request(window, 600, 600);
-
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    
     searchEntry = gtk_search_entry_new();
 
     sw = gtk_scrolled_window_new(NULL, NULL);

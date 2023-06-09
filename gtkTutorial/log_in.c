@@ -18,7 +18,8 @@ int main(int argc, char *argv[]) {
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
-
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    
     fixed = gtk_fixed_new();
 
     entry1 = gtk_entry_new();

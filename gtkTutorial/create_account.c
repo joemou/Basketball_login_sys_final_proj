@@ -27,6 +27,11 @@ void create_account(GtkButton *button, gpointer user_data) {
     }
 }
 
+void on_cancel_clicked2(GtkWidget *widget, gpointer data) {
+    GtkWidget *window = gtk_widget_get_toplevel(widget);
+    gtk_widget_destroy(window);
+}
+
 void create_create_account_window(){
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "創建帳號");
@@ -83,7 +88,7 @@ void create_create_account_window(){
 
     GtkWidget *button_cancel = gtk_button_new_with_label("Cancel");
     gtk_box_pack_start(GTK_BOX(vbox), button_cancel, FALSE, FALSE, 0);
-    g_signal_connect(button_cancel, "clicked", G_CALLBACK(on_cancel_clicked), NULL);
+    g_signal_connect(button_cancel, "clicked", G_CALLBACK(on_cancel_clicked2), NULL);
 
     GtkWidget *button_sign = gtk_button_new_with_label("Sign Up");
     gtk_box_pack_start(GTK_BOX(vbox), button_sign, FALSE, FALSE, 0);
