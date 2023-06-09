@@ -2,22 +2,6 @@
 #include "after.h"
 #include "create_account.h"
 
-gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
-    GdkRGBA color;
-    gdk_rgba_parse(&color, "white");
-
-    int width = 300;
-    int height = 400;
-    int x = (gtk_widget_get_allocated_width(widget) - width) / 2;
-    int y = (gtk_widget_get_allocated_height(widget) - height) / 2;
-
-    cairo_set_source_rgba(cr, color.red, color.green, color.blue, color.alpha);
-    cairo_rectangle(cr, x, y, width, height);
-    cairo_fill(cr);
-
-    return FALSE;
-}
-
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
