@@ -8,17 +8,26 @@ This project is developed based on the Linux Ubuntu environment and uses GTK as 
 
 You are strongly recommended to compile the source code in the Ubuntu environment and install GTK before compiling.
 
-
 ## Table of Contents
 
-- [Environment Setup](#environment-setup)
-  * [Installing a Virtual Machine for Linux Ubuntu](#installing-a-virtual-machine-for-linux-ubuntu)
-  * [Installing GTK](#installing-gtk)
-- [Features](#features)
-  * [Login System](#login-system)
-  * [Player Information Management](#player-information-management)
-
-
+- [final\_proj](#final_proj)
+  - [Introduction](#introduction)
+  - [Table of Contents](#table-of-contents)
+  - [Environment Setup](#environment-setup)
+    - [Installing a Virtual Machine for Linux Ubuntu](#installing-a-virtual-machine-for-linux-ubuntu)
+    - [Installing GTK](#installing-gtk)
+  - [Features](#features)
+    - [Login System](#login-system)
+      - [User Registration](#user-registration)
+      - [User Login](#user-login)
+    - [Player Information Management](#player-information-management)
+      - [Add Player](#add-player)
+      - [Edit Player Information](#edit-player-information)
+      - [Delete Player](#delete-player)
+      - [Sort Players](#sort-players)
+      - [View All Players](#view-all-players)
+      - [Search Player](#search-player)
+  - [Remind](#remind)
 
 ## Environment Setup
 
@@ -26,8 +35,6 @@ To set up the project environment, please follow the instructions below:
 
 1. Install the Linux Ubuntu operating system on your computer. Refer to the [Installing a Virtual Machine for Linux Ubuntu](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-a-virtual-machine-for-linux-ubuntu) section for detailed instructions.
 2. Install GTK for UI development. Refer to the [Installing GTK](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-gtk) section for detailed instructions.
-
-
 
 ### Installing a Virtual Machine for Linux Ubuntu
 
@@ -43,7 +50,6 @@ To set up a virtual machine for Linux Ubuntu, follow these steps:
 
 Now you have a virtual machine running Linux Ubuntu. You can proceed to install GTK for UI development.
 
-
 ### Installing GTK
 
 GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Linux. To install GTK in your Linux Ubuntu virtual machine, perform the following steps:
@@ -51,27 +57,26 @@ GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Lin
 1. Launch the terminal in the Linux Ubuntu virtual machine.
 2. Update the package lists and upgrade the existing packages by running the following commands:
 
-```bash
-sudo apt update
-sudo apt upgrade
-```
+    ```bash
+    sudo apt update
+    sudo apt upgrade
+    ```
 
 3. Install the necessary packages for GTK development:
 
-```bash
-sudo apt install libgtk-3-dev
-```
+    ```bash
+    sudo apt install libgtk-3-dev
+    ```
 
 4. After the installation is complete, you can verify the installation by checking the GTK version:
 
-```bash
-pkg-config --modversion gtk+-3.0
-```
+    ```bash
+    pkg-config --modversion gtk+-3.0
+    ```
 
 This command should display the version number of GTK installed on your system.
 
 Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling and running the source code of the `final_proj` project.
-
 
 ## Features
 
@@ -110,7 +115,6 @@ The "View All Players" functionality allows users to see the player information 
 #### Search Player
 
 The "Search Player" functionality allows users to search for specific players by entering their names. Users can input the exact player name they are looking for, and the system will retrieve the corresponding player's information, providing a convenient way to find specific players within the system.
-
 
 ## Remind
 
