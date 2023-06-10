@@ -1,10 +1,14 @@
+
 # final_proj
 
-This project is developed based on linux ubuntu environment and used GTK as extension for UI development.
+This project is developed based on the Linux Ubuntu environment and uses GTK as an extension for UI development.
 
-You are strongly recommended to compile the source code in ubuntu environment and install GTK before compile.
+You are strongly recommended to compile the source code in the Ubuntu environment and install GTK before compiling.
 
-Following are some instructions for installing a virtual machine for linux ubuntu and GTK.
+## Table of Contents
+
+- [Installing a Virtual Machine for Linux Ubuntu](#installing-a-virtual-machine-for-linux-ubuntu)
+- [Installing GTK](#installing-gtk)
 
 ## Installing a Virtual Machine for Linux Ubuntu
 
@@ -27,19 +31,22 @@ GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Lin
 1. Launch the terminal in the Linux Ubuntu virtual machine.
 2. Update the package lists and upgrade the existing packages by running the following commands:
 
-<pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>bash</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-bash">sudo apt update
+```bash
+sudo apt update
 sudo apt upgrade
-</code></div></div></pre>
+```
 
 3. Install the necessary packages for GTK development:
 
-<pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>bash</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-bash">sudo apt install libgtk-3-dev
-</code></div></div></pre>
+```bash
+sudo apt install libgtk-3-dev
+```
 
 4. After the installation is complete, you can verify the installation by checking the GTK version:
 
-<pre><div class="bg-black rounded-md mb-4"><div class="flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>bash</span><button class="flex ml-auto gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-bash">pkg-config --modversion gtk+-3.0
-</code></div></div></pre>
+```bash
+pkg-config --modversion gtk+-3.0
+```
 
 This command should display the version number of GTK installed on your system.
 
