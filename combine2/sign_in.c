@@ -5,7 +5,7 @@
 #include "edit_json.h"
 #include "sign_in.h"
 
-int hash(const char *str) {
+int hash(char *str) {
     int sum = 0;
     for (int i = 0; str[i] != '\0'; i++) {
         sum += str[i];
@@ -30,7 +30,7 @@ void insert_new_user(struct hash_table *table, struct user *user) {
     json_create_new_team(user->username);
 }
 
-int find_user(struct hash_table *table, const char *username, const char *password) {
+int find_user(struct hash_table *table, char *username, const char *password) {
     int index = hash(username);
     while (table->users[index] != NULL) {
         if (strcmp(table->users[index]->username, username) == 0 && strcmp(table->users[index]->password, password) == 0) {

@@ -47,7 +47,7 @@ void insert_AVL_to_gtk() {
     }
 }
 
-void insert_json_to_AVL(char *teamName) {
+void insert_json_to_AVL(char *teamID) {
     char *name;
     int gp;
     float fgp, tpp, ppg, spg;
@@ -59,8 +59,9 @@ void insert_json_to_AVL(char *teamName) {
     // find team
     for (int i = 0; i < teamSize; i++) {
         cJSON *team = cJSON_GetArrayItem(Basket_Ball_Teams, i);
-        char *getName = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
-        if (strcmp(getName, teamName) == 0) {
+        char *getID = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team ID"));
+        if (strcmp(getID, teamID) == 0) {
+            find_team = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
             authed_team = cJSON_GetObjectItem(team, "Players");
             break;
         }
@@ -604,10 +605,9 @@ int on_search_activate(GtkEntry *entry, gpointer data) {
     g_free(searchLower);
 }
 
-void create_after_window(const gchar *username) {
+void create_after_window(gchar *username) {
     GtkWidget *sw, *remove, *add, *edit, *io, *traverse, *vbox, *hbox, *searchEntry;
-    // uncomment when fixed
-    // find_team = username;
+    find_team = username;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 

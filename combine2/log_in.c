@@ -3,7 +3,7 @@
 #include "create_account.h"
 #include "sign_in.h"
 
-static GtkWidget *window;
+static GtkWidget *login_window;
 GtkWidget *fixed;
 GtkWidget *entry1;
 GtkWidget *entry2;
@@ -13,6 +13,9 @@ GtkWidget *title;
 GtkWidget *subtitle;
 PangoAttrList *attr_list;
 PangoAttribute *attr;
+
+gchar username[100];
+const gchar *password;
 
 static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     GdkRGBA color;
@@ -45,33 +48,32 @@ void on_button1_clicked(GtkWidget *widget, gpointer data) {
     int choice, Login_successful = 0;
         
     // authenticate user
-    const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
-    const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
+    // username = gtk_entry_get_text(GTK_ENTRY(entry1));
+    strcpy(username, gtk_entry_get_text(GTK_ENTRY(entry1)));
+    password = gtk_entry_get_text(GTK_ENTRY(entry2));
     if (find_user(&table, username, password)) {
-        g_print("Login successful!\n");
+        // g_print("Login successful!\n");
         Login_successful = 1;
     } else {
-        g_print("Login failed. Invalid username or password.\n");
+        // g_print("Login failed. Invalid username or password.\n");
     }
 
     // save users to file before exiting
     save_users(&table, "users.dat");
 
     if(Login_successful) {
-        GtkWidget *current_window = gtk_widget_get_toplevel(widget);
-        gtk_widget_destroy(current_window);
-
+        gtk_widget_destroy(login_window);
         create_after_window(username);
     }
 }
 
 int main(int argc, char *argv[]) {
+
     gtk_init(&argc, &argv);
 
-
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_default_size(GTK_WINDOW(window), 600, 600);
-    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+    login_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size(GTK_WINDOW(login_window), 600, 600);
+    gtk_window_set_position(GTK_WINDOW(login_window), GTK_WIN_POS_CENTER);
 
     fixed = gtk_fixed_new();
 
@@ -121,13 +123,13 @@ int main(int argc, char *argv[]) {
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
     // on_button1_clicked(button1, NULL);
     g_signal_connect(button2, "clicked", G_CALLBACK(on_button2_clicked), NULL);
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(login_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    gtk_widget_set_app_paintable(window, TRUE);
-    g_signal_connect(window, "draw", G_CALLBACK(draw_rectangle), NULL);
+    gtk_widget_set_app_paintable(login_window, TRUE);
+    g_signal_connect(login_window, "draw", G_CALLBACK(draw_rectangle), NULL);
 
-    gtk_container_add(GTK_CONTAINER(window), fixed);
-    gtk_widget_show_all(window);
+    gtk_container_add(GTK_CONTAINER(login_window), fixed);
+    gtk_widget_show_all(login_window);
 
     gtk_main();
 
