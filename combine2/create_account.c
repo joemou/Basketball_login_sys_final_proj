@@ -60,7 +60,6 @@ void create_account(GtkButton *button, gpointer data)
         gtk_label_set_text(GTK_LABEL(error_label), error_message);
 
         g_free(error_message);
-        // printf("The password entered twice is different\n\n");
     }
 
     save_users(&table, "users.dat");

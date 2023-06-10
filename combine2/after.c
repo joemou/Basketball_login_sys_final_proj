@@ -207,10 +207,8 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     GtkTreeIter iter;
     GtkTreeModel *model;
 
-    const gchar *name = gtk_entry_get_text(GTK_ENTRY(entry_name));
-
     // 轉換型態
-    const gchar *team = gtk_entry_get_text(GTK_ENTRY(entry_team));
+    const gchar *name = gtk_entry_get_text(GTK_ENTRY(entry_name));
     gint gp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_gp)));
     gfloat fpg = atof(gtk_entry_get_text(GTK_ENTRY(entry_fpg)));
     gfloat tpp = atof(gtk_entry_get_text(GTK_ENTRY(entry_tpp)));
@@ -258,7 +256,7 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
         // 在模型末尾添加一行
         gtk_list_store_append(store, &iter);
         // 設置新行的數據
-        gtk_list_store_set(store, &iter, LIST_TEAM, team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
     }
     gtk_widget_destroy(add_win);
@@ -290,35 +288,35 @@ GtkWidget *create_addwin()
     entry_name = gtk_entry_new();
     gtk_grid_attach(GTK_GRID(grid), entry_name, 1, 0, 1, 1);
 
-    label = gtk_label_new("team");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
-    entry_team = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_team, 1, 1, 1, 1);
+    // label = gtk_label_new("team");
+    // gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
+    // entry_team = gtk_entry_new();
+    // gtk_grid_attach(GTK_GRID(grid), entry_team, 1, 1, 1, 1);
 
     label = gtk_label_new("GP");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
     entry_gp = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_gp, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry_gp, 1, 1, 1, 1);
 
     label = gtk_label_new("FG%");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
     entry_fpg = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_fpg, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry_fpg, 1, 2, 1, 1);
 
     label = gtk_label_new("3P%");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 3, 1, 1);
     entry_tpp = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_tpp, 1, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry_tpp, 1, 3, 1, 1);
 
     label = gtk_label_new("PPG");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 4, 1, 1);
     entry_ppg = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_ppg, 1, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry_ppg, 1, 4, 1, 1);
 
     label = gtk_label_new("SPG");
-    gtk_grid_attach(GTK_GRID(grid), label, 0, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 5, 1, 1);
     entry_spg = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), entry_spg, 1, 6, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entry_spg, 1, 5, 1, 1);
 
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 
@@ -405,7 +403,6 @@ void edit_item(GtkWidget *widget, gpointer selection)
 
         // 輸入數據
         gtk_entry_set_text(GTK_ENTRY(entry_name), name);
-        gtk_entry_set_text(GTK_ENTRY(entry_team), team);
         gtk_entry_set_text(GTK_ENTRY(entry_gp), gp_str);
         gtk_entry_set_text(GTK_ENTRY(entry_fpg), fpg_str);
         gtk_entry_set_text(GTK_ENTRY(entry_tpp), tpp_str);
@@ -538,6 +535,7 @@ void traverse_win(GtkWidget *widget, gpointer data)
 
     gtk_window_set_title(GTK_WINDOW(window), "Traverse"); // 標題
     gtk_window_set_default_size(GTK_WINDOW(window), 500, 400);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
     GtkWidget *tree_view = gtk_tree_view_new();
     init_list(tree_view);
