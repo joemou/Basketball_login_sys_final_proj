@@ -1,10 +1,12 @@
-#include <gtk/gtk.h>
-#include "merge_sort.h"
-#include "basic_func.h"
-#include "edit_json.h"
 #include "after.h"
-#include "cJSON.h"
+
+#include <gtk/gtk.h>
+
 #include "avl.h"
+#include "basic_func.h"
+#include "cJSON.h"
+#include "edit_json.h"
+#include "merge_sort.h"
 
 #define isContent1Visible TRUE
 #define debug g_print("debug %d\n", __LINE__)
@@ -12,16 +14,15 @@
 GtkWidget *list, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
 GtkTreeSelection *selection;
 char *find_team = "Los Angeles Lakers";
-cJSON *teams_data; // complete data base
-cJSON *authed_team; // data base of particular team
+cJSON *teams_data;   // complete data base
+cJSON *authed_team;  // data base of particular team
 int not_init = 1;
 
 node *head = NULL;
 node *root = NULL;
 node *search_player;
 
-void insert_AVL_to_gtk()
-{
+void insert_AVL_to_gtk() {
     node *temp = head;
 
     GtkListStore *store;
@@ -30,8 +31,8 @@ void insert_AVL_to_gtk()
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
-    
-    while(temp!=NULL){
+
+    while (temp != NULL) {
         const gchar *name = temp->name;
         gint gp = temp->game_played;
         gdouble fgp = temp->feiled_goal_percentage;
@@ -41,13 +42,12 @@ void insert_AVL_to_gtk()
 
         temp = temp->next;
 
-        gtk_list_store_append(store, &iter); 
+        gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
     }
 }
 
-void insert_json_to_AVL(char *teamName)
-{
+void insert_json_to_AVL(char *teamName) {
     int time, game_played;
     float feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game;
 
@@ -58,16 +58,16 @@ void insert_json_to_AVL(char *teamName)
     cJSON *Basket_Ball_Teams = cJSON_GetObjectItem(teams_data, "Basket_Ball_Teams");
     int teamSize = cJSON_GetArraySize(Basket_Ball_Teams);
     // find team
-    for(int i = 0; i < teamSize; i++){
+    for (int i = 0; i < teamSize; i++) {
         cJSON *team = cJSON_GetArrayItem(Basket_Ball_Teams, i);
         char *getName = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
-        if(strcmp(getName, teamName) == 0){
+        if (strcmp(getName, teamName) == 0) {
             authed_team = cJSON_GetObjectItem(team, "Players");
             break;
         }
     }
     int size = cJSON_GetArraySize(authed_team);
-    for(int i = 0; i < size; ++i){
+    for (int i = 0; i < size; ++i) {
         cJSON *tmp = cJSON_GetArrayItem(authed_team, i);
         name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
         game_played = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
@@ -75,16 +75,15 @@ void insert_json_to_AVL(char *teamName)
         three_point_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
         points_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
         steal_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
-        create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);//create link list
-        root = insert(root,head);//create avl tree
+        create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);  // create link list
+        root = insert(root, head);                                                                                          // create avl tree
     }
 }
 
-void insert_data_to_data_base(const gchar *name, gint gp, gdouble fpg, gdouble ppg, gdouble spg, gdouble tpp)
-{
+void insert_data_to_data_base(const gchar *name, gint gp, gdouble fpg, gdouble ppg, gdouble spg, gdouble tpp) {
     // add to AVL
     create(&head, name, gp, fpg, tpp, ppg, spg);
-    root = insert(root,head);
+    root = insert(root, head);
     // add to JSON
     cJSON *player = cJSON_CreateObject();
     cJSON_AddStringToObject(player, "Name", name);
@@ -93,23 +92,22 @@ void insert_data_to_data_base(const gchar *name, gint gp, gdouble fpg, gdouble p
     cJSON_AddNumberToObject(player, "PPG", ppg);
     cJSON_AddNumberToObject(player, "FG", fpg);
     cJSON_AddNumberToObject(player, "SPG", spg);
-    
+
     cJSON_AddItemToArray(authed_team, player);
     FILE *file = fopen("data.json", "w");
     fputs(cJSON_Print(teams_data), file);
     fclose(file);
 }
 
-void remove_data_from_data_base(const char *search_name)
-{
+void remove_data_from_data_base(const char *search_name) {
     // delete from avl
-    delete(&head, head, root, search_name);
+    delete (&head, head, root, search_name);
     // delete from json
     int size = cJSON_GetArraySize(authed_team);
-    for(int i = 0; i < size; ++i){
+    for (int i = 0; i < size; ++i) {
         cJSON *tmp = cJSON_GetArrayItem(authed_team, i);
         char *player = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
-        if(strcmp(player, search_name) == 0){
+        if (strcmp(player, search_name) == 0) {
             cJSON_DeleteItemFromArray(authed_team, i);
             break;
         }
@@ -119,15 +117,14 @@ void remove_data_from_data_base(const char *search_name)
     fclose(file);
 }
 
-void delete_table_item()
-{
+void delete_table_item() {
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
-    
+
     while (gtk_tree_model_get_iter_first(model, &iter)) {
         gtk_list_store_remove(store, &iter);
         // Retrieve data from the model for the current item
@@ -138,9 +135,8 @@ void delete_table_item()
     }
 }
 
-void printInorder(struct node* node)
-{
-    if (node == NULL){
+void printInorder(struct node *node) {
+    if (node == NULL) {
         return;
     }
 
@@ -160,20 +156,18 @@ void printInorder(struct node* node)
     gdouble spg = node->steal_per_game;
     gdouble tpp = node->three_point_percentage;
 
-    gtk_list_store_append(store, &iter); 
+    gtk_list_store_append(store, &iter);
     gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
 
     printInorder(node->right);
 }
 
 // 點兩下取消選取的row
-void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection)
-{
+void double_click_row(GtkTreeView *list, GtkTreePath *path, GtkTreeViewColumn *column, gpointer selection) {
     gtk_tree_selection_unselect_all(selection);
 }
 
-void after_search_activate(GtkWidget *widget, gpointer label)
-{
+void after_search_activate(GtkWidget *widget, gpointer label) {
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -182,27 +176,24 @@ void after_search_activate(GtkWidget *widget, gpointer label)
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
     GtkTreeSelection *treeSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
-    if (gtk_tree_selection_get_selected(treeSelection, &model, &iter)) // 如果有選中行
+    if (gtk_tree_selection_get_selected(treeSelection, &model, &iter))  // 如果有選中行
     {
         gchar *item;
         gtk_tree_model_get(model, &iter, 1, &item, -1);
         remove_data_from_data_base(item);
-        gtk_list_store_remove(store, &iter); // 從模型中移除該行
+        gtk_list_store_remove(store, &iter);  // 從模型中移除該行
         // 印出 Delete success
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Delete success");
-        gtk_dialog_run(GTK_DIALOG(dialog)); // 運行對話框，直到關閉
-        gtk_widget_destroy(dialog);         // 關閉對話框
-    }
-    else
-    {
+        gtk_dialog_run(GTK_DIALOG(dialog));  // 運行對話框，直到關閉
+        gtk_widget_destroy(dialog);          // 關閉對話框
+    } else {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Not found");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
     }
 }
 
-void on_ok_clicked(GtkWidget *button, gpointer data)
-{
+void on_ok_clicked(GtkWidget *button, gpointer data) {
     GtkListStore *store;
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -218,26 +209,21 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
-    if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
-    {
+    if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
         // case of edit
         gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         remove_data_from_data_base(name);
         insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
-    }
-    else
-    {
+    } else {
         // case of add
         gboolean exists = FALSE;
         gboolean valid = gtk_tree_model_get_iter_first(model, &iter);
 
         gchar *existingName;
-        while (valid)
-        {
+        while (valid) {
             gtk_tree_model_get(model, &iter, LIST_NAME, &existingName, -1);
 
-            if (g_strcmp0(existingName, name) == 0)
-            {
+            if (g_strcmp0(existingName, name) == 0) {
                 exists = TRUE;
                 break;
             }
@@ -246,8 +232,7 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
         }
         g_free(existingName);
 
-        if (exists)
-        {
+        if (exists) {
             GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Data exists");
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
@@ -262,14 +247,12 @@ void on_ok_clicked(GtkWidget *button, gpointer data)
     gtk_widget_destroy(add_win);
 }
 
-void on_cancel_clicked(GtkWidget *button, gpointer data)
-{
+void on_cancel_clicked(GtkWidget *button, gpointer data) {
     gtk_widget_destroy(add_win);
 }
 
 // add的視窗
-GtkWidget *create_addwin() 
-{
+GtkWidget *create_addwin() {
     GtkWidget *win, *vbox, *grid, *hbox, *label, *button;
 
     win = gtk_dialog_new_with_buttons("Add", GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL, NULL);
@@ -338,13 +321,11 @@ GtkWidget *create_addwin()
     return win;
 }
 
-void append_item(GtkWidget *widget, gpointer data)
-{
+void append_item(GtkWidget *widget, gpointer data) {
     add_win = create_addwin();
 }
 
-void remove_item(GtkWidget *widget, gpointer selection)
-{
+void remove_item(GtkWidget *widget, gpointer selection) {
     GtkWidget *searchEntry, *win;
     GtkListStore *store;
     GtkTreeModel *model;
@@ -370,8 +351,7 @@ void remove_item(GtkWidget *widget, gpointer selection)
     gtk_widget_show_all(win);
 }
 
-void edit_item(GtkWidget *widget, gpointer selection)
-{
+void edit_item(GtkWidget *widget, gpointer selection) {
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -379,13 +359,11 @@ void edit_item(GtkWidget *widget, gpointer selection)
     store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
 
-    if (gtk_tree_model_get_iter_first(model, &iter) == FALSE)
-    {
+    if (gtk_tree_model_get_iter_first(model, &iter) == FALSE) {
         return;
     }
 
-    if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter))
-    {
+    if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
         gchar *name, *team;
         gint gp;
         gfloat tpp, ppg, fpg, spg;
@@ -420,21 +398,18 @@ void edit_item(GtkWidget *widget, gpointer selection)
 }
 
 // 測試column可不可以點擊
-void column_clicked(GtkTreeViewColumn *column, gpointer data)
-{
-    if(GPOINTER_TO_INT(data) == 0){
+void column_clicked(GtkTreeViewColumn *column, gpointer data) {
+    if (GPOINTER_TO_INT(data) == 0) {
         delete_table_item();
         printInorder(root);
-    }
-    else{
-        mergesort(&head, GPOINTER_TO_INT(data));
+    } else {
+        Mergesort(&head, GPOINTER_TO_INT(data));
         delete_table_item();
         insert_AVL_to_gtk();
     }
 }
 
-void init_list(GtkWidget *list)
-{
+void init_list(GtkWidget *list) {
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column, *column0, *column1, *column2, *column3, *column4, *column5;
     GtkListStore *store;
@@ -473,13 +448,12 @@ void init_list(GtkWidget *list)
     column5 = gtk_tree_view_column_new_with_attributes("SPG", renderer, "text", LIST_SPG, NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(list), column5);
     gtk_tree_view_column_set_clickable(column5, TRUE);
-    
 
     store = gtk_list_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_FLOAT, G_TYPE_FLOAT, G_TYPE_FLOAT, G_TYPE_FLOAT);
 
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 
-    if(not_init){
+    if (not_init) {
         g_signal_connect(column0, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[0]));
         g_signal_connect(column1, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[1]));
         g_signal_connect(column2, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[2]));
@@ -494,8 +468,7 @@ void init_list(GtkWidget *list)
     g_object_unref(store);
 }
 
-void traverse_all_to_tree(GtkWidget *tree_view)
-{
+void traverse_all_to_tree(GtkWidget *tree_view) {
     GtkListStore *store;
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -509,12 +482,12 @@ void traverse_all_to_tree(GtkWidget *tree_view)
     cJSON *Basket_Ball_Teams = cJSON_GetObjectItem(teams_data, "Basket_Ball_Teams");
     int size = cJSON_GetArraySize(Basket_Ball_Teams);
     // find team
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         cJSON *team = cJSON_GetArrayItem(Basket_Ball_Teams, i);
         char *getTeamName = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
         cJSON *tmp_team = cJSON_GetObjectItem(team, "Players");
         int teamSize = cJSON_GetArraySize(tmp_team);
-        for(int i = 0; i < teamSize; ++i){
+        for (int i = 0; i < teamSize; ++i) {
             cJSON *tmp = cJSON_GetArrayItem(tmp_team, i);
             name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
             gp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
@@ -522,18 +495,17 @@ void traverse_all_to_tree(GtkWidget *tree_view)
             tpp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
             ppg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
             spg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
-            gtk_list_store_append(store, &iter); 
+            gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter, LIST_TEAM, getTeamName, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         }
     }
 }
 
-void traverse_win(GtkWidget *widget, gpointer data)
-{
+void traverse_win(GtkWidget *widget, gpointer data) {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL); // 創建可滾動的視窗
+    GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);  // 創建可滾動的視窗
 
-    gtk_window_set_title(GTK_WINDOW(window), "Traverse"); // 標題
+    gtk_window_set_title(GTK_WINDOW(window), "Traverse");  // 標題
     gtk_window_set_default_size(GTK_WINDOW(window), 500, 400);
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
@@ -551,8 +523,7 @@ void traverse_win(GtkWidget *widget, gpointer data)
     gtk_widget_show_all(window);
 }
 
-int on_search_activate(GtkEntry *entry, gpointer data)
-{
+int on_search_activate(GtkEntry *entry, gpointer data) {
     const gchar *searchText = gtk_entry_get_text(entry);
     GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));
     GtkTreeIter iter;
@@ -563,16 +534,14 @@ int on_search_activate(GtkEntry *entry, gpointer data)
 
     valid = gtk_tree_model_get_iter_first(model, &iter);
 
-    while (valid)
-    {
+    while (valid) {
         gchar *name;
         gtk_tree_model_get(model, &iter, LIST_NAME, &name, -1);
 
         // 將項目名稱轉換為小寫以進行不分大小寫的比對
         gchar *nameLower = g_utf8_strdown(name, -1);
 
-        if (g_strstr_len(nameLower, -1, searchLower) != NULL)
-        {
+        if (g_strstr_len(nameLower, -1, searchLower) != NULL) {
             // 符合搜尋條件，將該項目顯示
             gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(data), gtk_tree_model_get_path(model, &iter), NULL, FALSE, 0.0, 0.0);
             gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(data)), &iter);
@@ -589,8 +558,7 @@ int on_search_activate(GtkEntry *entry, gpointer data)
     g_free(searchLower);
 }
 
-void create_after_window(const gchar *username)
-{
+void create_after_window(const gchar *username) {
     GtkWidget *sw, *remove, *add, *edit, *io, *traverse, *vbox, *hbox, *searchEntry;
     // uncomment when fixed
     // find_team = username;
