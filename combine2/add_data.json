@@ -1,0 +1,17 @@
+{
+    "Players":	[{
+        "Name":	"Low Tuang Hee",
+        "GP":	131,
+        "3P":	0.2,
+        "PPG":	20,
+        "FG":	0.3,
+        "SPG":	0.6
+    }, {
+        "Name":	"Love You 3000",
+        "GP":	12,
+        "3P":	0.131,
+        "PPG":	9,
+        "FG":	0.19,
+        "SPG":	0.3
+    }]
+}

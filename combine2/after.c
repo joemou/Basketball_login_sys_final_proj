@@ -48,10 +48,9 @@ void insert_AVL_to_gtk() {
 }
 
 void insert_json_to_AVL(char *teamName) {
-    int time, game_played;
-    float feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game;
-
     char *name;
+    int gp;
+    float fgp, tpp, ppg, spg;
 
     char *data = read_json_to_str("data.json");
     teams_data = cJSON_Parse(data);
@@ -70,13 +69,13 @@ void insert_json_to_AVL(char *teamName) {
     for (int i = 0; i < size; ++i) {
         cJSON *tmp = cJSON_GetArrayItem(authed_team, i);
         name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
-        game_played = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
-        feiled_goal_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "FG"));
-        three_point_percentage = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
-        points_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
-        steal_per_game = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
-        create(&head, name, game_played, feiled_goal_percentage, three_point_percentage, points_per_game, steal_per_game);  // create link list
-        root = insert(root, head);                                                                                          // create avl tree
+        gp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
+        fgp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "FG"));
+        tpp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
+        ppg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
+        spg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
+        create(&head, name, gp, fgp, tpp, ppg, spg);  // create link list
+        root = insert(root, head);                    // create avl tree
     }
 }
 
@@ -127,11 +126,6 @@ void delete_table_item() {
 
     while (gtk_tree_model_get_iter_first(model, &iter)) {
         gtk_list_store_remove(store, &iter);
-        // Retrieve data from the model for the current item
-        // gchar *item;
-        // gtk_tree_model_get(model, &iter, 0, &item, -1);  // Assuming the item is in the first column
-        // g_print("Item: %s\n", item);
-        // g_free(item);
     }
 }
 
@@ -201,7 +195,7 @@ void on_ok_clicked(GtkWidget *button, gpointer data) {
     // 轉換型態
     const gchar *name = gtk_entry_get_text(GTK_ENTRY(entry_name));
     gint gp = atoi(gtk_entry_get_text(GTK_ENTRY(entry_gp)));
-    gfloat fpg = atof(gtk_entry_get_text(GTK_ENTRY(entry_fpg)));
+    gfloat fgp = atof(gtk_entry_get_text(GTK_ENTRY(entry_fpg)));
     gfloat tpp = atof(gtk_entry_get_text(GTK_ENTRY(entry_tpp)));
     gfloat ppg = atof(gtk_entry_get_text(GTK_ENTRY(entry_ppg)));
     gfloat spg = atoi(gtk_entry_get_text(GTK_ENTRY(entry_spg)));
@@ -211,9 +205,9 @@ void on_ok_clicked(GtkWidget *button, gpointer data) {
 
     if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), &model, &iter)) {
         // case of edit
-        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        gtk_list_store_set(store, &iter, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
         remove_data_from_data_base(name);
-        insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
+        insert_data_to_data_base(name, gp, fgp, ppg, spg, tpp);
     } else {
         // case of add
         gboolean exists = FALSE;
@@ -241,8 +235,8 @@ void on_ok_clicked(GtkWidget *button, gpointer data) {
         // 在模型末尾添加一行
         gtk_list_store_append(store, &iter);
         // 設置新行的數據
-        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fpg, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
-        insert_data_to_data_base(name, gp, fpg, ppg, spg, tpp);
+        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        insert_data_to_data_base(name, gp, fgp, ppg, spg, tpp);
     }
     gtk_widget_destroy(add_win);
 }
@@ -270,11 +264,6 @@ GtkWidget *create_addwin() {
     gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
     entry_name = gtk_entry_new();
     gtk_grid_attach(GTK_GRID(grid), entry_name, 1, 0, 1, 1);
-
-    // label = gtk_label_new("team");
-    // gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
-    // entry_team = gtk_entry_new();
-    // gtk_grid_attach(GTK_GRID(grid), entry_team, 1, 1, 1, 1);
 
     label = gtk_label_new("GP");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
@@ -397,6 +386,63 @@ void edit_item(GtkWidget *widget, gpointer selection) {
     }
 }
 
+void add_data_from_file(gchar *filename) {
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    char *name;
+    int gp;
+    float fgp, tpp, ppg, spg;
+
+    store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
+    char *data = read_json_to_str(filename);
+    cJSON *tmp_obj = cJSON_Parse(data);
+    cJSON *new_players = cJSON_GetObjectItem(tmp_obj, "Players");
+    int player_num = cJSON_GetArraySize(new_players);
+    for (int i = 0; i < player_num; ++i) {
+        cJSON *tmp = cJSON_GetArrayItem(new_players, i);
+        name = cJSON_GetStringValue(cJSON_GetObjectItem(tmp, "Name"));
+        gp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "GP"));
+        fgp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "FG"));
+        tpp = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "3P"));
+        ppg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "PPG"));
+        spg = cJSON_GetNumberValue(cJSON_GetObjectItem(tmp, "SPG"));
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+        insert_data_to_data_base(name, gp, fgp, ppg, spg, tpp);
+    }
+}
+
+void on_file_selected(GtkFileChooserButton *filechooser, gpointer data) {
+    gchar *filepath = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(filechooser));
+    gchar *filename = g_path_get_basename(filepath);
+    add_data_from_file(filename);
+    // g_print("Selected file: %s\n", filename);
+    g_free(filepath);
+}
+
+void file_select_win(GtkWidget *widget, gpointer data) {
+    GtkWidget *vbox;
+    GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "INPUT FILE DATA");
+    gtk_window_set_default_size(GTK_WINDOW(window), 300, 40);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+
+    GtkWidget *filechooser = gtk_file_chooser_button_new("Select File", GTK_FILE_CHOOSER_ACTION_OPEN);
+    gtk_box_pack_start(GTK_BOX(vbox), filechooser, FALSE, FALSE, 2);
+
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+
+    g_signal_connect(filechooser, "file-set", G_CALLBACK(on_file_selected), NULL);
+    g_signal_connect(G_OBJECT(window), "delete_event", G_CALLBACK(gtk_widget_destroy), window);
+
+    gtk_widget_show_all(window);
+}
+
 // 測試column可不可以點擊
 void column_clicked(GtkTreeViewColumn *column, gpointer data) {
     if (GPOINTER_TO_INT(data) == 0) {
@@ -453,7 +499,7 @@ void init_list(GtkWidget *list) {
 
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 
-    if (not_init) {
+    if(not_init) {
         g_signal_connect(column0, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[0]));
         g_signal_connect(column1, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[1]));
         g_signal_connect(column2, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[2]));
@@ -625,6 +671,7 @@ void create_after_window(const gchar *username) {
     g_signal_connect(G_OBJECT(add), "clicked", G_CALLBACK(append_item), NULL);
     g_signal_connect(G_OBJECT(remove), "clicked", G_CALLBACK(remove_item), NULL);
     g_signal_connect(G_OBJECT(edit), "clicked", G_CALLBACK(edit_item), selection);
+    g_signal_connect(G_OBJECT(io), "clicked", G_CALLBACK(file_select_win), NULL);
     g_signal_connect(G_OBJECT(traverse), "clicked", G_CALLBACK(traverse_win), NULL);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(list, "row-activated", G_CALLBACK(double_click_row), selection);

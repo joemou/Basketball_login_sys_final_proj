@@ -7,7 +7,7 @@
 void split(node *first, node **a, node **b);
 
 /* merge the node */
-struct node *merge(node *a, node *b, int action);
+struct node *Merge(node *a, node *b, int action);
 
 void mergesort(node **head, int action);
 

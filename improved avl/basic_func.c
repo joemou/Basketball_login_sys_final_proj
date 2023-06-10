@@ -23,7 +23,7 @@ void create(node **head, char *name, int game_played,float feiled_goal_percentag
 
 //for mergesort
 void split(node *first, node **a, node **b);
-struct node *merge(node *a, node *b,int action);
+struct node *Merge(node *a, node *b,int action);
 void mergesort(node **head,int action);
 
 //for avl tree and search
@@ -99,7 +99,7 @@ void split(node *first,node **a,node **b){
 }
 
 //merge the node
-struct node *merge(node *a,node *b,int action){
+struct node *Merge(node *a,node *b,int action){
 
   node *result;
 
@@ -137,11 +137,11 @@ struct node *merge(node *a,node *b,int action){
 
   if(x>y){
     result = a;
-    result->next = merge(a->next, b,action);
+    result->next = Merge(a->next, b,action);
   }
   else{
     result = b;
-    result->next = merge(b->next, a,action);
+    result->next = Merge(b->next, a,action);
   }
 
   return result;
@@ -162,7 +162,7 @@ void mergesort (node **head,int action){
 
   
 
-  *head = merge(a,b,action);
+  *head = Merge(a,b,action);
 }
 /*end for merge sort*/
 

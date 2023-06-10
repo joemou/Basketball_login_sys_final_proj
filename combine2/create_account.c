@@ -24,16 +24,6 @@ static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     return FALSE;
 }
 
-gboolean check_username_exists()
-{
-    return 0;
-};
-
-gboolean check_passwords_match()
-{
-    return 0;
-};
-
 void create_account(GtkButton *button, gpointer data)
 {
     struct hash_table table;
@@ -43,7 +33,6 @@ void create_account(GtkButton *button, gpointer data)
 
     // load users from file
     load_users(&table, "users.dat");
-
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(username_entry));
     const gchar *password = gtk_entry_get_text(GTK_ENTRY(password_entry));
     const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
@@ -54,16 +43,19 @@ void create_account(GtkButton *button, gpointer data)
         strcpy(new_user->password, password);
         insert_new_user(&table, new_user);
         g_print("Sign Up successful!\n");
-    } else {
-        gchar *error_message = g_strdup("-error-");
+
+        save_users(&table, "users.dat");
+        
+        gtk_widget_destroy(data);
+    }
+    else {
+        gchar *error_message = g_strdup("-Password not match-");
 
         gtk_label_set_text(GTK_LABEL(error_label), error_message);
 
         g_free(error_message);
     }
 
-    save_users(&table, "users.dat");
-    gtk_widget_destroy(data);
 }
 
 void cancel_clicked(GtkWidget *widget, gpointer data)
@@ -106,14 +98,14 @@ void create_create_account_window()
     pango_attr_list_insert(attr_list, attr);
     gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
 
-    GtkWidget *username_entry = gtk_entry_new();
+    username_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(username_entry), "Username");
 
-    GtkWidget *password_entry = gtk_entry_new();
+    password_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(password_entry), FALSE);
     gtk_entry_set_placeholder_text(GTK_ENTRY(password_entry), "Password");
 
-    GtkWidget *confirm_entry = gtk_entry_new();
+    confirm_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(confirm_entry), FALSE);
     gtk_entry_set_placeholder_text(GTK_ENTRY(confirm_entry), "Confirm Password");
 
@@ -125,8 +117,9 @@ void create_create_account_window()
     gtk_widget_set_size_request(button_sign, 165, 20);
     g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), window);
 
-    gtk_fixed_put(GTK_FIXED(fixed2), title, 210, 150);
-    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 260, 200);
+    gtk_fixed_put(GTK_FIXED(fixed2), title, 190, 150);
+    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 245, 200);
+    gtk_fixed_put(GTK_FIXED(fixed2), error_label, 220, 230);
     gtk_fixed_put(GTK_FIXED(fixed2), username_entry, 210, 250);
     gtk_fixed_put(GTK_FIXED(fixed2), password_entry, 210, 300);
     gtk_fixed_put(GTK_FIXED(fixed2), confirm_entry, 210, 350);
