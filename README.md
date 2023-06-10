@@ -4,8 +4,6 @@
 
 Our project is a basketball player management system that allows users to manage and organize basketball player information.
 
-
-
 This project is developed based on the Linux Ubuntu environment and uses GTK as an extension for UI development.
 
 You are strongly recommended to compile the source code in the Ubuntu environment and install GTK before compiling.
@@ -18,8 +16,8 @@ You are strongly recommended to compile the source code in the Ubuntu environmen
   * [Installing GTK](#installing-gtk)
 - [Features](#features)
   * [Login System](#login-system)
-  * [Player Information Management
-    ](#player-information-management)
+  * [Player Information Management](#player-information-management)
+
 
 
 ## Environment Setup
@@ -28,6 +26,8 @@ To set up the project environment, please follow the instructions below:
 
 1. Install the Linux Ubuntu operating system on your computer. Refer to the [Installing a Virtual Machine for Linux Ubuntu](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-a-virtual-machine-for-linux-ubuntu) section for detailed instructions.
 2. Install GTK for UI development. Refer to the [Installing GTK](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-gtk) section for detailed instructions.
+
+
 
 ### Installing a Virtual Machine for Linux Ubuntu
 
@@ -42,6 +42,7 @@ To set up a virtual machine for Linux Ubuntu, follow these steps:
 7. Follow the installation wizard to complete the Linux Ubuntu installation process within the virtual machine.
 
 Now you have a virtual machine running Linux Ubuntu. You can proceed to install GTK for UI development.
+
 
 ### Installing GTK
 
@@ -71,16 +72,44 @@ This command should display the version number of GTK installed on your system.
 
 Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling and running the source code of the `final_proj` project.
 
+
 ## Features
 
 ### Login System
 
-Our login system allows users to register new accounts and log in with existing accounts. Before logging in, all account information is stored in a hash table to reduce the time required for account and password verification.
+#### User Registration
+
+The user registration functionality allows new users to create an account within the system. They can provide their desired username and password, which will be securely stored in the system's hash table for future authentication.
+
+#### User Login
+
+The user login functionality enables registered users to log in to the system using their credentials. Upon successful login, users gain access to their account and the associated features and data.
 
 ### Player Information Management
 
-Player information is stored using a linked list within each team. Additionally, an AVL tree is used to organize information for all players in the system based on their names. After logging in, users can only modify player information within their own team. The system allows sorting players by name or various statistics such as scoring rate. Users can also add, edit, or delete player information. They can view player data for all teams and search for specific players by name (exact match is required).
+#### Add Player
 
+The "Add Player" functionality allows users to add new players to their respective teams. Users can provide details such as the player's name, position, and statistics, which will be stored in the linked list structure.
+
+#### Edit Player Information
+
+The "Edit Player Information" functionality enables users to modify the information of existing players within their teams. They can update player details such as position, statistics, or any other relevant information.
+
+#### Delete Player
+
+The "Delete Player" functionality allows users to remove players from their teams. Users can select the player they want to delete, and the system will remove the corresponding player's information from the linked list.
+
+#### Sort Players
+
+The "Sort Players" functionality allows users to sort players within their teams or across all teams based on specific criteria. They can choose to sort players by name, scoring rate, or any other relevant statistics. This functionality helps in organizing and comparing player data.
+
+#### View All Players
+
+The "View All Players" functionality allows users to see the player information for all teams in the system. It provides a comprehensive view of all players, their respective teams, and their details, facilitating easy access to information across teams.
+
+#### Search Player
+
+The "Search Player" functionality allows users to search for specific players by entering their names. Users can input the exact player name they are looking for, and the system will retrieve the corresponding player's information, providing a convenient way to find specific players within the system.
 
 
 ## Remind
