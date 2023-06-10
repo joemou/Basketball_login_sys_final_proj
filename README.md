@@ -81,6 +81,10 @@ Our login system allows users to register new accounts and log in with existing 
 
 Player information is stored using a linked list within each team. Additionally, an AVL tree is used to organize information for all players in the system based on their names. After logging in, users can only modify player information within their own team. The system allows sorting players by name or various statistics such as scoring rate. Users can also add, edit, or delete player information. They can view player data for all teams and search for specific players by name (exact match is required).
 
+
+
+## Remind
+
 This project is developed based on the Linux Ubuntu environment and uses GTK as an extension for UI development.
 
 You are strongly recommended to compile the source code in the Ubuntu environment and install GTK before compiling.
