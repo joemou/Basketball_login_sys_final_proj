@@ -1,6 +1,6 @@
 {
 	"Basket_Ball_Teams":	[{
-			"Team ID":		"Los_Angeles_Lakers",
+			"Team ID":	"Los_Angeles_Lakers",
 			"Team Name":	"Los Angeles Lakers",
 			"Players":	[{
 					"Name":	"Mo Bamba",
@@ -109,7 +109,7 @@
 					"SPG":	0.5
 				}]
 		}, {
-			"Team ID":		"Golden_State_Warriors",
+			"Team ID":	"Golden_State_Warriors",
 			"Team Name":	"Golden State Warriors",
 			"Players":	[]
 		}]
