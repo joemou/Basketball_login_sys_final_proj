@@ -59,9 +59,8 @@ void insert_json_to_AVL(char *teamID) {
     // find team
     for (int i = 0; i < teamSize; i++) {
         cJSON *team = cJSON_GetArrayItem(Basket_Ball_Teams, i);
-        char *getID = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team ID"));
-        if (strcmp(getID, teamID) == 0) {
-            find_team = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
+        find_team = cJSON_GetStringValue(cJSON_GetObjectItem(team, "Team Name"));
+        if (strcmp(find_team, teamID) == 0) {
             authed_team = cJSON_GetObjectItem(team, "Players");
             break;
         }
@@ -225,7 +224,7 @@ void on_ok_clicked(GtkWidget *button, gpointer data) {
 
             valid = gtk_tree_model_iter_next(model, &iter);
         }
-        g_free(existingName);
+        // g_free(existingName);
 
         if (exists) {
             GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Data exists");
@@ -378,7 +377,6 @@ void edit_item(GtkWidget *widget, gpointer selection) {
         gtk_entry_set_text(GTK_ENTRY(entry_spg), spg_str);
 
         g_free(name);
-        g_free(team);
         g_free(gp_str);
         g_free(fpg_str);
         g_free(tpp_str);
@@ -500,7 +498,7 @@ void init_list(GtkWidget *list) {
 
     gtk_tree_view_set_model(GTK_TREE_VIEW(list), GTK_TREE_MODEL(store));
 
-    if(not_init) {
+    if (not_init) {
         g_signal_connect(column0, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[0]));
         g_signal_connect(column1, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[1]));
         g_signal_connect(column2, "clicked", G_CALLBACK(column_clicked), GINT_TO_POINTER(sort_by[2]));

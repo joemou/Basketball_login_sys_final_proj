@@ -1,7 +1,6 @@
 {
 	"Basket_Ball_Teams":	[{
-			"Team ID":	"Los_Angeles_Lakers",
-			"Team Name":	"Los Angeles Lakers",
+			"Team Name":	"Los_Angeles_Lakers",
 			"Players":	[{
 					"Name":	"Mo Bamba",
 					"GP":	9,
@@ -109,8 +108,28 @@
 					"SPG":	0.5
 				}]
 		}, {
-			"Team ID":	"Golden_State_Warriors",
-			"Team Name":	"Golden State Warriors",
-			"Players":	[]
+			"Team Name":	"q",
+			"Players":	[{
+					"Name":	"mark",
+					"GP":	8964,
+					"3P":	0.5,
+					"PPG":	0.5,
+					"FG":	0.5,
+					"SPG":	1
+				}, {
+					"Name":	"mac",
+					"GP":	318,
+					"3P":	0.20000000298023224,
+					"PPG":	0.20000000298023224,
+					"FG":	0.20000000298023224,
+					"SPG":	0
+				}, {
+					"Name":	"musk",
+					"GP":	23,
+					"3P":	0.300000011920929,
+					"PPG":	0.300000011920929,
+					"FG":	0.300000011920929,
+					"SPG":	1
+				}]
 		}]
 }
