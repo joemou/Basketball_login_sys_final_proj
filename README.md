@@ -34,8 +34,8 @@ You are strongly recommended to compile the source code in the Ubuntu environmen
 
 To set up the project environment, please follow the instructions below:
 
-1. Install the Linux Ubuntu operating system on your computer. Refer to the [Installing a Virtual Machine for Linux Ubuntu](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-a-virtual-machine-for-linux-ubuntu) section for detailed instructions.
-2. Install GTK for UI development. Refer to the [Installing GTK](https://chat.openai.com/c/b64a15ff-f9bc-420d-8f95-bd0b448c4f98#installing-gtk) section for detailed instructions.
+1. Install the Linux Ubuntu operating system on your computer. Refer to the [Installing a Virtual Machine for Linux Ubuntu](#installing-a-virtual-machine-for-linux-ubuntu) section for detailed instructions.
+2. Install GTK for UI development. Refer to the [Installing GTK](#installing-gtk) section for detailed instructions.
 
 ### Installing a Virtual Machine for Linux Ubuntu
 
@@ -58,40 +58,40 @@ GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Lin
 1. Launch the terminal in the Linux Ubuntu virtual machine.
 2. Update the package lists and upgrade the existing packages by running the following commands:
 
-    ```bash
-    sudo apt update
-    sudo apt upgrade
-    ```
-
+   ```bash
+   sudo apt update
+   sudo apt upgrade
+   ```
 3. Install the necessary packages for GTK development:
 
-    ```bash
-    sudo apt install libgtk-3-dev
-    ```
-
+   ```bash
+   sudo apt install libgtk-3-dev
+   ```
 4. After the installation is complete, you can verify the installation by checking the GTK version:
 
-    ```bash
-    pkg-config --modversion gtk+-3.0
-    ```
+   ```bash
+   pkg-config --modversion gtk+-3.0
+   ```
 
 This command should display the version number of GTK installed on your system.
 
 Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling the source code of the `final_proj` project.
 
 ## Demonstration
+
 To successfully execute our database system, please follow the instructions provided below:
 
 1. Clone the Repository:
+
 - Open the GitHub repository link mentioned above.
 - Click on the "Clone" button and copy the repository URL.
 - Open your preferred terminal or command prompt.
 - Navigate to the desired directory where you want to clone the repository.
 - Execute the following command:
-  
-    ```bash
-    git clone [paste the copied repository URL]
-    ```
+
+  ```bash
+  git clone [paste the copied repository URL]
+  ```
 
 2. Install Dependencies:
 
@@ -99,6 +99,7 @@ To successfully execute our database system, please follow the instructions prov
 - Install any missing dependencies using the appropriate package manager for your programming language or framework.
 
 3. Execution:
+
 - Once the repository is cloned and dependencies are installed, **navigate to the project directory using the terminal or command prompt**.
 - After navigated to the directory, type `make` on the terminal to construct the executable file.
 - Execute the executable file on the same directory to ensure no unexpected errors occur with `./Player_Database`.
