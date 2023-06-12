@@ -11,7 +11,7 @@
 #define isContent1Visible TRUE
 #define debug g_print("debug %d\n", __LINE__)
 
-GtkWidget *list, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+GtkWidget *list, *error_label, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
 GtkTreeSelection *selection;
 char *find_team = "Los Angeles Lakers";
 cJSON *teams_data;   // complete data base
@@ -256,6 +256,8 @@ GtkWidget *create_addwin() {
 
     GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(win));
 
+    error_label = gtk_label_new(NULL);
+
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
@@ -300,6 +302,7 @@ GtkWidget *create_addwin() {
     g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_cancel_clicked), NULL);
     gtk_box_pack_start(GTK_BOX(hbox), button, TRUE, TRUE, 3);
 
+    // gtk_box_pack_start(GTK_BOX(vbox), grid, FALSE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), grid, FALSE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
     gtk_container_add(GTK_CONTAINER(content_area), vbox);
