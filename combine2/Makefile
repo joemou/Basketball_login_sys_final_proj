@@ -29,6 +29,3 @@ avl.o: avl.c avl.h basic_func.h
 
 merge_sort.o: merge_sort.c merge_sort.h basic_func.h
 	${CC} -c merge_sort.c
-
-clean: 
-	rm ${PROG}
