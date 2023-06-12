@@ -245,10 +245,11 @@ void on_cancel_clicked(GtkWidget *button, gpointer data) {
     gtk_widget_destroy(add_win);
 }
 
-// add的視窗
+//Open add data's window
 GtkWidget *create_addwin() {
     GtkWidget *win, *vbox, *grid, *hbox, *label, *button;
 
+    // Create a new dialog window with buttons titled "Add"
     win = gtk_dialog_new_with_buttons("Add", GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL, NULL);
     gtk_container_set_border_width(GTK_CONTAINER(win), 10);
     gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
@@ -257,11 +258,13 @@ GtkWidget *create_addwin() {
 
     error_label = gtk_label_new(NULL);
 
+   // Create a vertical box and a grid
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
 
+   // Create labels and entry fields for each data field
     label = gtk_label_new("Name");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
     entry_name = gtk_entry_new();
