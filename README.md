@@ -90,7 +90,6 @@ To successfully execute our database system, please follow the instructions prov
 - Execute the following command:
   
     ```bash
-    Copy code
     git clone [paste the copied repository URL]
     ```
 
