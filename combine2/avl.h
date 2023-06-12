@@ -32,7 +32,7 @@ struct node *delete(struct node **head, struct node *point, struct node *root, c
 /* Printing linklist */
 void print_player(node *node);
 
-void AVL_STRING_SEARCH(node *root, char *name);
+struct node *AVL_STRING_SEARCH(node *root, const char *name);
 
 /* for print */
 void print_linklist(node *head);

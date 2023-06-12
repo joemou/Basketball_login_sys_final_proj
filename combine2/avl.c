@@ -2,6 +2,8 @@
 #include "basic_func.h"
 #include "avl.h"
 
+#define debug g_print("debug %d\n", __LINE__)
+
 void create(node **head, const char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
   node *temp = (node *)malloc(sizeof(node));
   
@@ -13,8 +15,8 @@ void create(node **head, const char *name, int game_played,float feiled_goal_per
   temp->steal_per_game = steal_per_game;
 
   temp->next = NULL;
-  temp->right = NULL;
   temp->left = NULL;
+  temp->right = NULL;
   temp->height = 1;
 
   if(*head==NULL){
@@ -243,18 +245,15 @@ void print_player(node *node) {
   printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
-void AVL_STRING_SEARCH(node *root,char *name) {
-
+struct node *AVL_STRING_SEARCH(node *root, const char *name) {
   if(root==NULL){
-    g_print("not found");
-    return;
+    return root;
   }
-
+  
   int flag = strcmp(name, root->name);
   
   if(flag==0){
-    print_player(root);
-    return;
+    return root;
   }
   else if(flag<0){
     return AVL_STRING_SEARCH(root->left, name);

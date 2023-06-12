@@ -11,7 +11,8 @@
 #define isContent1Visible TRUE
 #define debug g_print("debug %d\n", __LINE__)
 
-GtkWidget *list, *error_label, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+GtkWidget *list, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+static GtkWidget *error_label;
 GtkTreeSelection *selection;
 char *find_team = "Los Angeles Lakers";
 cJSON *teams_data;   // complete data base
@@ -573,37 +574,36 @@ void traverse_win(GtkWidget *widget, gpointer data) {
 
 int on_search_activate(GtkEntry *entry, gpointer data) {
     const gchar *searchText = gtk_entry_get_text(entry);
-    GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));
-    GtkTreeIter iter;
-    gboolean valid;
+    
+    delete_table_item();
 
-    // 將搜尋字串轉換為小寫以進行不分大小寫的比對
-    gchar *searchLower = g_utf8_strdown(searchText, -1);
-
-    valid = gtk_tree_model_get_iter_first(model, &iter);
-
-    while (valid) {
-        gchar *name;
-        gtk_tree_model_get(model, &iter, LIST_NAME, &name, -1);
-
-        // 將項目名稱轉換為小寫以進行不分大小寫的比對
-        gchar *nameLower = g_utf8_strdown(name, -1);
-
-        if (g_strstr_len(nameLower, -1, searchLower) != NULL) {
-            // 符合搜尋條件，將該項目顯示
-            gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(data), gtk_tree_model_get_path(model, &iter), NULL, FALSE, 0.0, 0.0);
-            gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(data)), &iter);
-            g_free(nameLower);
-            g_free(name);
-            g_free(searchLower);
-            return 1;
-        }
-        g_free(nameLower);
-        g_free(name);
-
-        valid = gtk_tree_model_iter_next(model, &iter);
+    if(searchText[0] == '\0') {
+        insert_AVL_to_gtk();
     }
-    g_free(searchLower);
+
+    node *found = AVL_STRING_SEARCH(root, searchText);
+
+    if(found == NULL) {
+        // do nothing
+    }
+    else {
+        GtkListStore *store;
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+
+        store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+        model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
+        const gchar *name = found->name;
+        gint gp = found->game_played;
+        gdouble fgp = found->feiled_goal_percentage;
+        gdouble ppg = found->points_per_game;
+        gdouble spg = found->steal_per_game;
+        gdouble tpp = found->three_point_percentage;
+
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+    }
 }
 
 void create_after_window(gchar *username) {
