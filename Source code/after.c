@@ -11,7 +11,8 @@
 #define isContent1Visible TRUE
 #define debug g_print("debug %d\n", __LINE__)
 
-GtkWidget *list, *error_label, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+GtkWidget *list, *add_win, *entry_team, *entry_name, *entry_gp, *entry_fpg, *entry_ppg, *entry_spg, *entry_tpp, *window;
+static GtkWidget *error_label;
 GtkTreeSelection *selection;
 char *find_team = "Los Angeles Lakers";
 cJSON *teams_data;   // complete data base
