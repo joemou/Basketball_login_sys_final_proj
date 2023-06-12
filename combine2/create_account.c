@@ -1,9 +1,14 @@
 #include <gtk/gtk.h>
-#include "after.h"
+#include "create_account.h"
+#include "sign_in.h"
+
+GtkWidget *username_entry;
+GtkWidget *password_entry;
+GtkWidget *confirm_entry;
 
 GtkWidget *error_label;
 
-gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
+static gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     GdkRGBA color;
     gdk_rgba_parse(&color, "white");
 
@@ -19,36 +24,47 @@ gboolean draw_rectangle(GtkWidget *widget, cairo_t *cr, gpointer data) {
     return FALSE;
 }
 
-gboolean check_username_exists(){
-    return 0;
-};
+void create_account(GtkButton *button, gpointer data)
+{
+    struct hash_table table;
+    table.size = HASH_SIZE;
+    table.users = malloc(sizeof(struct user *) * table.size);
+    memset(table.users, 0, sizeof(struct user *) * table.size);
 
-gboolean check_passwords_match(){
-    return 0;
-};
+    // load users from file
+    load_users(&table, "users.dat");
+    const gchar *username = gtk_entry_get_text(GTK_ENTRY(username_entry));
+    const gchar *password = gtk_entry_get_text(GTK_ENTRY(password_entry));
+    const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
 
-void create_account(GtkButton *button, gpointer user_data) {
-    gboolean passwords_match = check_passwords_match();
-    gboolean username_exists = check_username_exists();
+    if (strcmp(password, password2) == 0) {
+        struct user *new_user = malloc(sizeof(struct user));
+        strcpy(new_user->username, username);
+        strcpy(new_user->password, password);
+        insert_new_user(&table, new_user);
+        g_print("Sign Up successful!\n");
 
-    if (!passwords_match || username_exists) {
-        gchar *error_message = NULL;
-
-        error_message = g_strdup("-error-");
+        save_users(&table, "users.dat");
+        
+        gtk_widget_destroy(data);
+    }
+    else {
+        gchar *error_message = g_strdup("-Password not match-");
 
         gtk_label_set_text(GTK_LABEL(error_label), error_message);
 
         g_free(error_message);
-        return;
     }
+
 }
 
-void on_cancel_clicked2(GtkWidget *widget, gpointer data) {
-    GtkWidget *window = gtk_widget_get_toplevel(widget);
-    gtk_widget_destroy(window);
+void cancel_clicked(GtkWidget *widget, gpointer data)
+{
+    gtk_widget_destroy(data);
 }
 
-void create_create_account_window(){
+void create_create_account_window()
+{
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     GtkWidget *fixed2;
     gtk_window_set_title(GTK_WINDOW(window), "SIGN UP");
@@ -73,7 +89,7 @@ void create_create_account_window(){
     gtk_label_set_attributes(GTK_LABEL(title), attr_list);
     pango_attr_list_unref(attr_list);
 
-    // 创建副标题标签
+    // 創建副標題標籤
     GtkWidget *subtitle = gtk_label_new("SIGN UP");
     attr_list = pango_attr_list_new();
     attr = pango_attr_weight_new(PANGO_WEIGHT_BOLD);
@@ -82,27 +98,28 @@ void create_create_account_window(){
     pango_attr_list_insert(attr_list, attr);
     gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
 
-    GtkWidget *username_entry = gtk_entry_new();
+    username_entry = gtk_entry_new();
     gtk_entry_set_placeholder_text(GTK_ENTRY(username_entry), "Username");
 
-    GtkWidget *password_entry = gtk_entry_new();
+    password_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(password_entry), FALSE);
     gtk_entry_set_placeholder_text(GTK_ENTRY(password_entry), "Password");
 
-    GtkWidget *confirm_entry = gtk_entry_new();
+    confirm_entry = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(confirm_entry), FALSE);
     gtk_entry_set_placeholder_text(GTK_ENTRY(confirm_entry), "Confirm Password");
 
     GtkWidget *button_cancel = gtk_button_new_with_label("Cancel");
     gtk_widget_set_size_request(button_cancel, 165, 20);
-    g_signal_connect(button_cancel, "clicked", G_CALLBACK(on_cancel_clicked2), NULL);
+    g_signal_connect(button_cancel, "clicked", G_CALLBACK(cancel_clicked), window);
 
     GtkWidget *button_sign = gtk_button_new_with_label("Sign Up");
     gtk_widget_set_size_request(button_sign, 165, 20);
-    g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), NULL);
+    g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), window);
 
-    gtk_fixed_put(GTK_FIXED(fixed2), title, 210, 150);
-    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 260, 200);
+    gtk_fixed_put(GTK_FIXED(fixed2), title, 190, 150);
+    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 245, 200);
+    gtk_fixed_put(GTK_FIXED(fixed2), error_label, 220, 230);
     gtk_fixed_put(GTK_FIXED(fixed2), username_entry, 210, 250);
     gtk_fixed_put(GTK_FIXED(fixed2), password_entry, 210, 300);
     gtk_fixed_put(GTK_FIXED(fixed2), confirm_entry, 210, 350);
@@ -121,8 +138,7 @@ void create_create_account_window(){
     gtk_main();
 };
 
-void on_button2_clicked(GtkWidget *widget, gpointer data){
+void on_button2_clicked(GtkWidget *widget, gpointer data)
+{
     create_create_account_window();
 };
-
-

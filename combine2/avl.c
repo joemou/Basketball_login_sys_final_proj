@@ -1,48 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <gtk/gtk.h>
+#include "basic_func.h"
+#include "avl.h"
 
-typedef struct node{
-  char name[25];
-  int score;
-  int height;
-  
-  struct node *next;//for link list pointer
-  
-  struct node *right;//for avl tree pointer
-  struct node *left;
-} node;
-
-//for crate node
-void create(node **head, char *name, int score);
-
-//for mergesort
-void split(node *first, node **a, node **b);
-struct node *merge(node *a, node *b);
-void mergesort(node **head);
-
-//for avl tree and search
-int height(struct node *node);
-int max(int a, int b);
-struct node *RR(struct node *y);
-struct node *LL(struct node *x);
-int getBalance(struct node *root);
-struct node *insert(struct node *root, struct node *node);
-struct node *min_name(struct node *node);
-struct node *delete(struct node **head, struct node *point, struct node *root, char *name);
-void print_player(node *node);
-void AVL_STRING_SEARCH(node *root, char *name);
-
-//for print
-void print_linklist(node *head);
-void printInorder(struct node *node);
-
-/*for create the node*/
-//insert node at head
-void create(node **head,char *name,int score){
+void create(node **head, const char *name, int game_played,float feiled_goal_percentage,float three_point_percentage,float points_per_game,float steal_per_game){
   node *temp = (node *)malloc(sizeof(node));
+  
   strcpy(temp->name, name);
-  temp->score = score;
+  temp->game_played = game_played;
+  temp->feiled_goal_percentage = feiled_goal_percentage;
+  temp->three_point_percentage = three_point_percentage;
+  temp->points_per_game = points_per_game;
+  temp->steal_per_game = steal_per_game;
+
   temp->next = NULL;
   temp->right = NULL;
   temp->left = NULL;
@@ -56,95 +25,17 @@ void create(node **head,char *name,int score){
     *head = temp;
   }
 }
-/*end for create the node*/
-
-
-
-
-/*for merge sort*/
-//find mid and split
-void split(node *first,node **a,node **b){
-
-  node *fast;
-  node *slow;
-
-  fast = first->next;
-  slow = first;
-
-  while(fast!=NULL){
-    fast = fast->next;
-    if(fast!=NULL){
-      fast = fast->next;
-      slow = slow->next;
-    }
-  }
-
-  *b = slow->next;
-
-  *a = first;
-  slow->next = NULL;
-
-    
-}
-
-//merge the node
-struct node *merge(node *a,node *b){
-
-  node *result;
-
-  if(a==NULL){
-    return b;
-  }
-  if(b==NULL){
-    return a;
-  }
-
-  if(a->score>b->score){
-    result = a;
-    result->next = merge(a->next, b);
-  }
-  else{
-    result = b;
-    result->next = merge(b->next, a);
-  }
-
-  return result;
-}
-void mergesort (node **head){
-  node *first = *head;
-  node *a;
-  node *b;
-
-  if((first==NULL)||(first->next==NULL)){
-    return;
-  }
-
-  split(first, &a, &b);
-
-  mergesort(&a);
-  mergesort(&b);
-
-  *head = merge(a,b);
-}
-/*end for merge sort*/
-
 
 /*for AVL tree https://www.youtube.com/watch?v=jDM6_TnYIqE*/
-//detect height
 
-/*for inorder traversal*/
-//print order by alphabet
-void printInorder(struct node* node)
-{
-  if (node == NULL){
-    return;
-  }
-  printInorder(node->left);
-  printf("%s %d\n", node->name,node->score);
-  printInorder(node->right);
-}
-/*end for inorder traversal*/
-
+// void printInorder(struct node* node) {
+//   if (node == NULL){
+//     return;
+//   }
+//   printInorder(node->left);
+//   printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
+//   printInorder(node->right);
+// }
 
 int height(struct node *node) {
   if (node == NULL)
@@ -156,7 +47,6 @@ int max(int a, int b) {
   return (a > b) ? a : b;
 }
 
-// Right rotate
 struct node *RR(struct node *y) {
   node *x = y->left;
   node *T2 = x->right;
@@ -170,7 +60,6 @@ struct node *RR(struct node *y) {
   return x;
 }
 
-// Left rotate
 struct node *LL(struct node *x) {
   node *y = x->right;
   node *T2 = y->left;
@@ -184,14 +73,12 @@ struct node *LL(struct node *x) {
   return y;
 }
 
-// Get the balance factor
 int getBalance(struct node *root) {
   if (root == NULL)
     return 0;
   return height(root->left) - height(root->right);
 }
 
-// Find the correct position to insert the node and insert it
 struct node *insert(struct node *root, struct node *node) {
   if (root == NULL)
     return node;
@@ -205,7 +92,7 @@ struct node *insert(struct node *root, struct node *node) {
     root->right = insert(root->right, node);
   }
   else{
-    printf("name exist\n");
+    g_print("name exist\n");
     return node; // node with same name already exists
   }
   // Update height of this node
@@ -234,7 +121,6 @@ struct node *insert(struct node *root, struct node *node) {
   return root;
 }
 
-//find the min value under specify node
 struct node *min_name(struct node *node) {
   struct node *current = node;
 
@@ -244,8 +130,7 @@ struct node *min_name(struct node *node) {
   return current;
 }
 
-//delete the node on avl tree and link_list
-struct node *delete(struct node **head,struct node *point,struct node *root, char *name){
+struct node *delete(struct node **head,struct node *point,struct node *root, const char *name) {
   // Find the node and delete it
   if (root == NULL)
     return root;
@@ -303,9 +188,7 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
           prev->next = temp2->next;
         }
 
-        printf("b\n\n");
       }
-      free(temp);
     }
     //two children 
     else {
@@ -315,11 +198,11 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
 
       //copy the temp data and rewrite root
       strcpy(root->name, temp->name);
-      root->score = temp->score;
+      root->game_played = temp->game_played;
 
       //delete the copied node
       root->right = delete(head, point, root->right, temp->name);
-      printf("c\n");
+      
     }
 
   }
@@ -356,14 +239,14 @@ struct node *delete(struct node **head,struct node *point,struct node *root, cha
   return root;
 }
 
-void print_player(node *node){
-  printf("%s %d",node->name,node->score);
+void print_player(node *node) {
+  printf("%s %d %.2f %.2f %.2f %.2f\n",node->name,node->game_played,node->feiled_goal_percentage,node->three_point_percentage,node->points_per_game,node->steal_per_game);
 } 
 
-void AVL_STRING_SEARCH(node *root,char *name){
+void AVL_STRING_SEARCH(node *root,char *name) {
 
   if(root==NULL){
-    printf("not found");
+    g_print("not found");
     return;
   }
 
@@ -380,104 +263,12 @@ void AVL_STRING_SEARCH(node *root,char *name){
     return AVL_STRING_SEARCH(root->right, name);
   }
 }
-/*end for avl tree*/
 
-
-
-/*for printing linklist */
-void print_linklist(node *head){
+void print_linklist(node *head) {
   node *temp = head;
-  printf("name score\n");
+  printf("\n");
   while(temp!=NULL){
-    printf("%s %d\n",temp->name,temp->score);
+    printf("%s %d %.2f %.2f %.2f %.2f\n",temp->name,temp->game_played,temp->feiled_goal_percentage,temp->three_point_percentage,temp->points_per_game,temp->steal_per_game);
     temp = temp->next;
   }
 }
-/*end for printing linklist*/
-
-int main(){
-  int time,score;
-
-  printf("Number of records you want to key in:");
-  scanf("%d", &time);
-  
-  node *head = NULL;
-  node *root = NULL;
-
-  char name[25];
-
-  while(time--){
-    printf("Enter name & score:");
-    scanf(" %s %d", name, &score);
-    create(&head, name, score);//create link list
-    root = insert(root,head);//create avl tree
-  }
-  mergesort(&head);
-
-  int action = -1;
-  char search_name[25];
-  printf("\n0.exit\n");
-  printf("1.print player orederd by socre\n");
-  printf("2.print player orederd by name alphabet(INORDER)\n");
-  printf("3.insert the player\n");
-  printf("4.delete the player by input name\n");
-  printf("5.search player by input name\n\n");
-  printf("action: ");
-
-  while(scanf("%d",&action)!=0){
-    switch(action){
-      case 1:
-        print_linklist(head);
-        break;
-      case 2: 
-        printInorder(root);
-        break;
-      case 3:
-        printf("Enter name & score:");
-        scanf(" %s %d", name, &score);
-        create(&head, name, score);//create link list
-        root = insert(root,head);//create avl tree
-        mergesort(&head);//sort
-        printf("inserted successfully\n");
-        break;
-      case 4:
-        printf("plz input the name\n");
-        scanf("%s", search_name);
-        delete (&head,head,root, search_name);
-        printf("deleted successfully\n");
-        break;
-      case 5:
-        printf("plz input the name\n");
-        scanf("%s", search_name);
-        AVL_STRING_SEARCH(root, search_name);
-        break;
-    }
-    printf("\naction: ");
-  }
-}
-
-/*
-
-test case:
-
-10
-joe 100
-bob 45
-apple 56
-nui 34
-kyle 90
-aufwiderzen 78
-zebra 28
-monica 10000
-jordan 3232223
-hao 100009
-
-
-
-5
-a 1
-b 2
-c 3
-d 4
-e 5
-*/
