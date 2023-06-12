@@ -246,11 +246,10 @@ void on_cancel_clicked(GtkWidget *button, gpointer data) {
     gtk_widget_destroy(add_win);
 }
 
-//Open add data's window
+// add的視窗
 GtkWidget *create_addwin() {
     GtkWidget *win, *vbox, *grid, *hbox, *label, *button;
 
-    // Create a new dialog window with buttons titled "Add"
     win = gtk_dialog_new_with_buttons("Add", GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL, NULL);
     gtk_container_set_border_width(GTK_CONTAINER(win), 10);
     gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER);
@@ -259,13 +258,11 @@ GtkWidget *create_addwin() {
 
     error_label = gtk_label_new(NULL);
 
-   // Create a vertical box and a grid
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
 
-   // Create labels and entry fields for each data field
     label = gtk_label_new("Name");
     gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
     entry_name = gtk_entry_new();
@@ -577,37 +574,36 @@ void traverse_win(GtkWidget *widget, gpointer data) {
 
 int on_search_activate(GtkEntry *entry, gpointer data) {
     const gchar *searchText = gtk_entry_get_text(entry);
-    GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(data));
-    GtkTreeIter iter;
-    gboolean valid;
+    
+    delete_table_item();
 
-    // 將搜尋字串轉換為小寫以進行不分大小寫的比對
-    gchar *searchLower = g_utf8_strdown(searchText, -1);
-
-    valid = gtk_tree_model_get_iter_first(model, &iter);
-
-    while (valid) {
-        gchar *name;
-        gtk_tree_model_get(model, &iter, LIST_NAME, &name, -1);
-
-        // 將項目名稱轉換為小寫以進行不分大小寫的比對
-        gchar *nameLower = g_utf8_strdown(name, -1);
-
-        if (g_strstr_len(nameLower, -1, searchLower) != NULL) {
-            // 符合搜尋條件，將該項目顯示
-            gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(data), gtk_tree_model_get_path(model, &iter), NULL, FALSE, 0.0, 0.0);
-            gtk_tree_selection_select_iter(gtk_tree_view_get_selection(GTK_TREE_VIEW(data)), &iter);
-            g_free(nameLower);
-            g_free(name);
-            g_free(searchLower);
-            return 1;
-        }
-        g_free(nameLower);
-        g_free(name);
-
-        valid = gtk_tree_model_iter_next(model, &iter);
+    if(searchText[0] == '\0') {
+        insert_AVL_to_gtk();
     }
-    g_free(searchLower);
+
+    node *found = AVL_STRING_SEARCH(root, searchText);
+
+    if(found == NULL) {
+        // do nothing
+    }
+    else {
+        GtkListStore *store;
+        GtkTreeIter iter;
+        GtkTreeModel *model;
+
+        store = GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(list)));
+        model = gtk_tree_view_get_model(GTK_TREE_VIEW(list));
+
+        const gchar *name = found->name;
+        gint gp = found->game_played;
+        gdouble fgp = found->feiled_goal_percentage;
+        gdouble ppg = found->points_per_game;
+        gdouble spg = found->steal_per_game;
+        gdouble tpp = found->three_point_percentage;
+
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, LIST_TEAM, find_team, LIST_NAME, name, LIST_GP, gp, LIST_FPG, fgp, LIST_PPG, ppg, LIST_SPG, spg, LIST_TPP, tpp, -1);
+    }
 }
 
 void create_after_window(gchar *username) {
