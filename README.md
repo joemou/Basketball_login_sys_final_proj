@@ -16,6 +16,7 @@ You are strongly recommended to compile the source code in the Ubuntu environmen
   - [Environment Setup](#environment-setup)
     - [Installing a Virtual Machine for Linux Ubuntu](#installing-a-virtual-machine-for-linux-ubuntu)
     - [Installing GTK](#installing-gtk)
+  - [Demonstration](#demonstration)
   - [Features](#features)
     - [Login System](#login-system)
       - [User Registration](#user-registration)
@@ -77,6 +78,31 @@ GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Lin
 This command should display the version number of GTK installed on your system.
 
 Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling the source code of the `final_proj` project.
+
+## Demonstration
+To successfully execute our database system, please follow the instructions provided below:
+
+1. Clone the Repository:
+- Open the GitHub repository link mentioned above.
+- Click on the "Clone" button and copy the repository URL.
+- Open your preferred terminal or command prompt.
+- Navigate to the desired directory where you want to clone the repository.
+- Execute the following command:
+  
+    ```bash
+    Copy code
+    git clone [paste the copied repository URL]
+    ```
+
+2. Install Dependencies:
+
+- Ensure that you have the necessary dependencies installed to run the database system. (Please refer to the [Environment Setup](#environment-setup) section of the README file for a list of dependencies and their versions.)
+- Install any missing dependencies using the appropriate package manager for your programming language or framework.
+
+3. Execution:
+- Once the repository is cloned and dependencies are installed, **navigate to the project directory using the terminal or command prompt**.
+- After navigated to the directory, type `make` on the terminal to construct the executable file.
+- Execute the executable file on the same directory to ensure no unexpected errors occur with `./Player_Database`.
 
 ## Features
 
