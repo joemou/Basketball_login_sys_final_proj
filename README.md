@@ -76,7 +76,7 @@ GTK is a widely used toolkit for creating graphical user interfaces (GUI) in Lin
 
 This command should display the version number of GTK installed on your system.
 
-Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling and running the source code of the `final_proj` project.
+Now you have successfully installed GTK in your Linux Ubuntu virtual machine. You can proceed with compiling the source code of the `final_proj` project.
 
 ## Features
 
