@@ -109,11 +109,11 @@ void create_create_account_window()
     gtk_entry_set_visibility(GTK_ENTRY(confirm_entry), FALSE);
     gtk_entry_set_placeholder_text(GTK_ENTRY(confirm_entry), "Confirm Password");
 
-    GtkWidget *button_cancel = gtk_button_new_with_label("Cancel");
+    GtkWidget *button_cancel = gtk_button_new_with_label("CANCEL");
     gtk_widget_set_size_request(button_cancel, 165, 20);
     g_signal_connect(button_cancel, "clicked", G_CALLBACK(cancel_clicked), window);
 
-    GtkWidget *button_sign = gtk_button_new_with_label("Sign Up");
+    GtkWidget *button_sign = gtk_button_new_with_label("SIGN UP");
     gtk_widget_set_size_request(button_sign, 165, 20);
     g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), window);
 
@@ -123,8 +123,8 @@ void create_create_account_window()
     gtk_fixed_put(GTK_FIXED(fixed2), username_entry, 210, 240);
     gtk_fixed_put(GTK_FIXED(fixed2), password_entry, 210, 290);
     gtk_fixed_put(GTK_FIXED(fixed2), confirm_entry, 210, 340);
-    gtk_fixed_put(GTK_FIXED(fixed2), button_cancel, 210, 390);
-    gtk_fixed_put(GTK_FIXED(fixed2), button_sign, 210, 440);
+    gtk_fixed_put(GTK_FIXED(fixed2), button_cancel, 210, 440);
+    gtk_fixed_put(GTK_FIXED(fixed2), button_sign, 210, 390);
 
     gtk_widget_show(title);
     gtk_widget_show(subtitle);
