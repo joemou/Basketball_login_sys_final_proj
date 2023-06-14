@@ -117,14 +117,14 @@ void create_create_account_window()
     gtk_widget_set_size_request(button_sign, 165, 20);
     g_signal_connect(button_sign, "clicked", G_CALLBACK(create_account), window);
 
-    gtk_fixed_put(GTK_FIXED(fixed2), title, 190, 150);
-    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 245, 200);
-    gtk_fixed_put(GTK_FIXED(fixed2), error_label, 220, 230);
-    gtk_fixed_put(GTK_FIXED(fixed2), username_entry, 210, 250);
-    gtk_fixed_put(GTK_FIXED(fixed2), password_entry, 210, 300);
-    gtk_fixed_put(GTK_FIXED(fixed2), confirm_entry, 210, 350);
-    gtk_fixed_put(GTK_FIXED(fixed2), button_cancel, 210, 400);
-    gtk_fixed_put(GTK_FIXED(fixed2), button_sign, 210, 450);
+    gtk_fixed_put(GTK_FIXED(fixed2), title, 210, 140);
+    gtk_fixed_put(GTK_FIXED(fixed2), subtitle, 250, 190);
+    gtk_fixed_put(GTK_FIXED(fixed2), error_label, 220, 220);
+    gtk_fixed_put(GTK_FIXED(fixed2), username_entry, 210, 240);
+    gtk_fixed_put(GTK_FIXED(fixed2), password_entry, 210, 290);
+    gtk_fixed_put(GTK_FIXED(fixed2), confirm_entry, 210, 340);
+    gtk_fixed_put(GTK_FIXED(fixed2), button_cancel, 210, 390);
+    gtk_fixed_put(GTK_FIXED(fixed2), button_sign, 210, 440);
 
     gtk_widget_show(title);
     gtk_widget_show(subtitle);
